@@ -1,6 +1,7 @@
+import 'dart:typed_data';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../core/authentication/authentication_service.dart';
 import '../core/backup/backup_service.dart';
 import '../core/database/app_database.dart';
 import '../core/encryption/encryption_service.dart';
@@ -30,7 +31,24 @@ final keyServiceProvider = Provider((ref) => KeyService());
 final storageProvider = Provider(
   (ref) => PrivateStorageService(ref.watch(encryptionProvider)),
 );
-final authenticationProvider = Provider((ref) => AuthenticationService());
+final privateImageBytesProvider = FutureProvider.autoDispose
+    .family<Uint8List?, String>((ref, encryptedPath) async {
+      try {
+        final key = await ref.watch(keyServiceProvider).getOrCreateMasterKey();
+        final preview = await ref
+            .watch(storageProvider)
+            .decryptToTemporary(encryptedPath, key, extension: '.jpg');
+        final bytes = await preview.readAsBytes();
+        try {
+          await preview.delete();
+        } catch (_) {
+          // The encrypted original remains safe if temporary cleanup fails.
+        }
+        return bytes;
+      } catch (_) {
+        return null;
+      }
+    });
 final screenSecurityProvider = Provider((ref) => ScreenSecurityService());
 final notificationProvider = Provider((ref) => NotificationService());
 final backupProvider = Provider(
@@ -57,4 +75,3 @@ final capsuleProvider = FutureProvider.family<Capsule, String>(
 final capsuleItemsProvider = FutureProvider.family<List<CapsuleItem>, String>(
   (ref, id) => ref.watch(capsuleRepositoryProvider).getItems(id),
 );
-final accessGrantsProvider = StateProvider<Map<String, DateTime>>((ref) => {});

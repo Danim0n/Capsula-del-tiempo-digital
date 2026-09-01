@@ -4,6 +4,7 @@ import 'package:drift/drift.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../core/database/app_database.dart';
+import '../../../core/storage/custom_cover_id.dart';
 import '../domain/capsule_models.dart';
 
 class CapsuleRepository {
@@ -197,9 +198,10 @@ class CapsuleRepository {
 
   Future<List<String>> discardDraft(String id) async {
     await _requireDraft(id);
+    final capsule = await getCapsule(id);
     final items = await getItems(id);
     await (db.delete(db.capsuleRows)..where((r) => r.id.equals(id))).go();
-    return items.map((item) => item.encryptedPath).whereType<String>().toList();
+    return _encryptedPaths(capsule, items);
   }
 
   Future<void> seal(String id, DateTime now) async {
@@ -223,17 +225,6 @@ class CapsuleRepository {
     await (db.update(db.capsuleRows)..where((r) => r.id.equals(id))).write(
       CapsuleRowsCompanion(openedAt: Value(now), status: const Value('opened')),
     );
-  }
-
-  Future<void> markEmergencyAccessed(String id, DateTime now) async {
-    final capsule = await getCapsule(id);
-    if (capsule.persistedStatus != CapsuleStatus.sealed ||
-        !now.isBefore(capsule.unlockAt)) {
-      throw StateError('Emergency access is only valid for locked capsules.');
-    }
-    await (db.update(db.capsuleRows)..where(
-      (r) => r.id.equals(id),
-    )).write(CapsuleRowsCompanion(emergencyAccessedAt: Value(now)));
   }
 
   Future<void> moveToTrash(String id, DateTime now) async {
@@ -267,7 +258,7 @@ class CapsuleRepository {
     }
     final items = await getItems(id);
     await (db.delete(db.capsuleRows)..where((r) => r.id.equals(id))).go();
-    return items.map((item) => item.encryptedPath).whereType<String>().toList();
+    return _encryptedPaths(capsule, items);
   }
 
   Future<List<String>> purgeExpiredTrash(DateTime now) async {
@@ -294,6 +285,11 @@ class CapsuleRepository {
             .getSingle();
     if (status != 'draft') throw const CapsuleLockedException();
   }
+
+  List<String> _encryptedPaths(Capsule capsule, List<CapsuleItem> items) => [
+    ...items.map((item) => item.encryptedPath).whereType<String>(),
+    if (customCoverPath(capsule.coverId) case final path?) path,
+  ];
 
   Future<Capsule> _withCount(CapsuleRow row) async {
     final count =

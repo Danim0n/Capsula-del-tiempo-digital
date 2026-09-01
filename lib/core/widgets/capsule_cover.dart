@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../app/providers.dart';
 import '../../app/theme/app_theme.dart';
+import '../storage/custom_cover_id.dart';
 
 const capsuleCoverIds = [
   'cover_01',
@@ -17,7 +20,7 @@ const capsuleCoverIds = [
   'cover_12',
 ];
 
-class CapsuleCover extends StatelessWidget {
+class CapsuleCover extends ConsumerWidget {
   const CapsuleCover({
     super.key,
     required this.coverId,
@@ -29,7 +32,8 @@ class CapsuleCover extends StatelessWidget {
   final bool showLock;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final encryptedPath = customCoverPath(coverId);
     final index = capsuleCoverIds
         .indexOf(coverId)
         .clamp(0, capsuleCoverIds.length - 1);
@@ -43,12 +47,33 @@ class CapsuleCover extends StatelessWidget {
         child: Stack(
           fit: StackFit.expand,
           children: [
-            Image.asset(
-              assetName,
-              fit: BoxFit.cover,
-              filterQuality: FilterQuality.medium,
-              cacheWidth: 768,
-            ),
+            if (encryptedPath == null)
+              Image.asset(
+                assetName,
+                fit: BoxFit.cover,
+                filterQuality: FilterQuality.medium,
+                cacheWidth: 768,
+              )
+            else
+              ref
+                  .watch(privateImageBytesProvider(encryptedPath))
+                  .when(
+                    loading: _coverPlaceholder,
+                    error: (_, __) => _coverPlaceholder(),
+                    data:
+                        (bytes) =>
+                            bytes == null
+                                ? _coverPlaceholder()
+                                : Image.memory(
+                                  bytes,
+                                  fit: BoxFit.cover,
+                                  filterQuality: FilterQuality.medium,
+                                  cacheWidth: 1200,
+                                  gaplessPlayback: true,
+                                  errorBuilder:
+                                      (_, __, ___) => _coverPlaceholder(),
+                                ),
+                  ),
             const DecoratedBox(
               decoration: BoxDecoration(
                 gradient: LinearGradient(
@@ -84,4 +109,15 @@ class CapsuleCover extends StatelessWidget {
       ),
     );
   }
+
+  Widget _coverPlaceholder() => const ColoredBox(
+    color: AppColors.paleRose,
+    child: Center(
+      child: Icon(
+        Icons.photo_outlined,
+        size: 34,
+        color: AppColors.secondaryInk,
+      ),
+    ),
+  );
 }

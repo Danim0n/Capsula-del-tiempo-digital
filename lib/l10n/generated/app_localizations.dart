@@ -206,18 +206,6 @@ abstract class AppLocalizations {
   /// **'Elegir fecha'**
   String get chooseDate;
 
-  /// No description provided for @emergencyMode.
-  ///
-  /// In es, this message translates to:
-  /// **'Modo de emergencia'**
-  String get emergencyMode;
-
-  /// No description provided for @emergencySubtitle.
-  ///
-  /// In es, this message translates to:
-  /// **'Acceso seguro en casos especiales'**
-  String get emergencySubtitle;
-
   /// No description provided for @emptyCapsules.
   ///
   /// In es, this message translates to:
@@ -259,12 +247,6 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Abiertas'**
   String get opened;
-
-  /// No description provided for @emergency.
-  ///
-  /// In es, this message translates to:
-  /// **'Emergencia'**
-  String get emergency;
 
   /// No description provided for @itemsCount.
   ///
@@ -319,12 +301,6 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Gestionar categorías'**
   String get manageCategories;
-
-  /// No description provided for @deviceAuthentication.
-  ///
-  /// In es, this message translates to:
-  /// **'Autenticación del dispositivo'**
-  String get deviceAuthentication;
 
   /// No description provided for @trash.
   ///
@@ -500,6 +476,12 @@ abstract class AppLocalizations {
   /// **'Portada'**
   String get cover;
 
+  /// No description provided for @customCover.
+  ///
+  /// In es, this message translates to:
+  /// **'Tu foto'**
+  String get customCover;
+
   /// No description provided for @next.
   ///
   /// In es, this message translates to:
@@ -662,24 +644,6 @@ abstract class AppLocalizations {
   /// **'Abrir cápsula'**
   String get openCapsule;
 
-  /// No description provided for @authenticatePrompt.
-  ///
-  /// In es, this message translates to:
-  /// **'Confirma tu identidad para ver tus recuerdos privados.'**
-  String get authenticatePrompt;
-
-  /// No description provided for @authenticationFailed.
-  ///
-  /// In es, this message translates to:
-  /// **'No se pudo autenticar.'**
-  String get authenticationFailed;
-
-  /// No description provided for @deviceSecurityMissing.
-  ///
-  /// In es, this message translates to:
-  /// **'Configura primero un bloqueo de pantalla seguro en tu dispositivo.'**
-  String get deviceSecurityMissing;
-
   /// No description provided for @opening.
   ///
   /// In es, this message translates to:
@@ -734,47 +698,17 @@ abstract class AppLocalizations {
   /// **'Eliminar definitivamente'**
   String get deleteForever;
 
+  /// No description provided for @deleteForeverQuestion.
+  ///
+  /// In es, this message translates to:
+  /// **'Esta acción no se puede deshacer. ¿Quieres eliminar definitivamente esta cápsula?'**
+  String get deleteForeverQuestion;
+
   /// No description provided for @trashEmpty.
   ///
   /// In es, this message translates to:
   /// **'La papelera está vacía'**
   String get trashEmpty;
-
-  /// No description provided for @emergencyExplanation.
-  ///
-  /// In es, this message translates to:
-  /// **'El modo de emergencia permite acceder anticipadamente a contenido sellado.'**
-  String get emergencyExplanation;
-
-  /// No description provided for @emergencyWarning.
-  ///
-  /// In es, this message translates to:
-  /// **'La cápsula registrará que ha sido accedida antes de la fecha prevista.'**
-  String get emergencyWarning;
-
-  /// No description provided for @selectCapsule.
-  ///
-  /// In es, this message translates to:
-  /// **'Selecciona una cápsula cerrada'**
-  String get selectCapsule;
-
-  /// No description provided for @holdEmergency.
-  ///
-  /// In es, this message translates to:
-  /// **'Mantén pulsado durante 3 segundos'**
-  String get holdEmergency;
-
-  /// No description provided for @emergencyAccess.
-  ///
-  /// In es, this message translates to:
-  /// **'Acceder de emergencia'**
-  String get emergencyAccess;
-
-  /// No description provided for @emergencyRecorded.
-  ///
-  /// In es, this message translates to:
-  /// **'Acceso de emergencia realizado el {date}.'**
-  String emergencyRecorded(Object date);
 
   /// No description provided for @notificationOpening.
   ///
@@ -1055,7 +989,7 @@ abstract class AppLocalizations {
   /// No description provided for @tutorialCoversBody.
   ///
   /// In es, this message translates to:
-  /// **'Cada portada da una identidad distinta a la cápsula. Toca cualquiera para seleccionarla.'**
+  /// **'Elige una portada o toca «Tu foto» para usar una imagen de la cámara o la galería.'**
   String get tutorialCoversBody;
 
   /// No description provided for @tutorialQuickDatesTitle.
@@ -1117,30 +1051,6 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'En Mis cápsulas puedes encontrar, buscar y filtrar las cápsulas que hayas creado.'**
   String get tutorialCapsulesBody;
-
-  /// No description provided for @tutorialEmergencyTitle.
-  ///
-  /// In es, this message translates to:
-  /// **'Modo de emergencia'**
-  String get tutorialEmergencyTitle;
-
-  /// No description provided for @tutorialEmergencyBody.
-  ///
-  /// In es, this message translates to:
-  /// **'Permite acceder antes de tiempo a una cápsula sellada después de confirmar tu identidad. El acceso anticipado queda registrado.'**
-  String get tutorialEmergencyBody;
-
-  /// No description provided for @tutorialEmergencyWarningTitle.
-  ///
-  /// In es, this message translates to:
-  /// **'Úsalo solo cuando sea necesario'**
-  String get tutorialEmergencyWarningTitle;
-
-  /// No description provided for @tutorialEmergencyWarningBody.
-  ///
-  /// In es, this message translates to:
-  /// **'Tras elegir una cápsula deberás mantener pulsado el botón durante 3 segundos. Esta acción no pasa desapercibida: queda anotada en la cápsula.'**
-  String get tutorialEmergencyWarningBody;
 
   /// No description provided for @tutorialComplete.
   ///

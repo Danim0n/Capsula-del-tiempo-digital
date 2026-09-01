@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -10,7 +11,7 @@ import 'package:video_player/video_player.dart';
 
 import '../../../app/providers.dart';
 import '../../../app/theme/app_theme.dart';
-import '../../../core/authentication/authentication_service.dart';
+import '../../../core/navigation/app_navigation.dart';
 import '../../../l10n/l10n.dart';
 import '../domain/capsule_models.dart';
 
@@ -24,36 +25,10 @@ class CapsuleContentScreen extends ConsumerStatefulWidget {
 }
 
 class _CapsuleContentScreenState extends ConsumerState<CapsuleContentScreen> {
-  bool _authorized = false;
-  bool _checking = true;
-
   @override
   void initState() {
     super.initState();
-    _authorize();
-  }
-
-  Future<void> _authorize() async {
-    final grant = ref.read(accessGrantsProvider)[widget.capsuleId];
-    var allowed = grant != null && grant.isAfter(DateTime.now());
-    if (!allowed) {
-      final result = await ref
-          .read(authenticationProvider)
-          .authenticate(
-            'Confirma tu identidad para ver tus recuerdos privados.',
-          );
-      allowed = result == AuthenticationResult.success;
-    }
-    if (!mounted) return;
-    if (!allowed) {
-      Navigator.of(context).maybePop();
-      return;
-    }
-    await ref.read(screenSecurityProvider).protect();
-    setState(() {
-      _authorized = true;
-      _checking = false;
-    });
+    unawaited(ref.read(screenSecurityProvider).protect());
   }
 
   @override
@@ -65,13 +40,11 @@ class _CapsuleContentScreenState extends ConsumerState<CapsuleContentScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (_checking || !_authorized) {
-      return const Scaffold(body: Center(child: CircularProgressIndicator()));
-    }
     final capsule = ref.watch(capsuleProvider(widget.capsuleId));
     final items = ref.watch(capsuleItemsProvider(widget.capsuleId));
     return Scaffold(
       appBar: AppBar(
+        leading: const AppBackButton(fallbackLocation: '/capsules'),
         title: Text(capsule.valueOrNull?.title ?? context.l10n.appName),
       ),
       body: items.when(

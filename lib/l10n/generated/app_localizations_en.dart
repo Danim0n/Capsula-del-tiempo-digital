@@ -65,12 +65,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get chooseDate => 'Choose date';
 
   @override
-  String get emergencyMode => 'Emergency mode';
-
-  @override
-  String get emergencySubtitle => 'Secure access in special cases';
-
-  @override
   String get emptyCapsules => 'Your first capsule starts here';
 
   @override
@@ -91,9 +85,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get opened => 'Opened';
-
-  @override
-  String get emergency => 'Emergency';
 
   @override
   String itemsCount(num count) {
@@ -131,9 +122,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get manageCategories => 'Manage categories';
-
-  @override
-  String get deviceAuthentication => 'Device authentication';
 
   @override
   String get trash => 'Trash';
@@ -226,6 +214,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cover => 'Cover';
 
   @override
+  String get customCover => 'Your photo';
+
+  @override
   String get next => 'Next';
 
   @override
@@ -308,17 +299,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get openCapsule => 'Open capsule';
 
   @override
-  String get authenticatePrompt =>
-      'Confirm your identity to view your private memories.';
-
-  @override
-  String get authenticationFailed => 'Authentication failed.';
-
-  @override
-  String get deviceSecurityMissing =>
-      'First configure a secure screen lock on your device.';
-
-  @override
   String get opening => 'Opening your capsule…';
 
   @override
@@ -346,29 +326,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get deleteForever => 'Delete permanently';
 
   @override
+  String get deleteForeverQuestion =>
+      'This action cannot be undone. Do you want to permanently delete this capsule?';
+
+  @override
   String get trashEmpty => 'Trash is empty';
-
-  @override
-  String get emergencyExplanation =>
-      'Emergency mode allows early access to sealed content.';
-
-  @override
-  String get emergencyWarning =>
-      'The capsule will record that it was accessed before its intended date.';
-
-  @override
-  String get selectCapsule => 'Select a closed capsule';
-
-  @override
-  String get holdEmergency => 'Press and hold for 3 seconds';
-
-  @override
-  String get emergencyAccess => 'Emergency access';
-
-  @override
-  String emergencyRecorded(Object date) {
-    return 'Emergency access recorded on $date.';
-  }
 
   @override
   String get notificationOpening => 'Opening notification';
@@ -518,7 +480,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get tutorialCoversBody =>
-      'Each cover gives your capsule a different identity. Tap any cover to select it.';
+      'Choose a cover or tap “Your photo” to use an image from the camera or gallery.';
 
   @override
   String get tutorialQuickDatesTitle => 'Quick dates';
@@ -554,20 +516,6 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get tutorialCapsulesBody =>
       'My capsules is where you can find, search and filter every capsule you create.';
-
-  @override
-  String get tutorialEmergencyTitle => 'Emergency mode';
-
-  @override
-  String get tutorialEmergencyBody =>
-      'It allows early access to a sealed capsule after confirming your identity. The early access is recorded.';
-
-  @override
-  String get tutorialEmergencyWarningTitle => 'Use it only when necessary';
-
-  @override
-  String get tutorialEmergencyWarningBody =>
-      'After choosing a capsule, hold the button for 3 seconds. This action is not hidden: it is recorded on the capsule.';
 
   @override
   String get tutorialComplete =>

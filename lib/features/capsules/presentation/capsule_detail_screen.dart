@@ -5,7 +5,7 @@ import 'package:intl/intl.dart';
 
 import '../../../app/providers.dart';
 import '../../../app/theme/app_theme.dart';
-import '../../../core/authentication/authentication_service.dart';
+import '../../../core/navigation/app_navigation.dart';
 import '../../../core/widgets/capsule_cover.dart';
 import '../../../l10n/l10n.dart';
 import '../domain/capsule_models.dart';
@@ -19,7 +19,9 @@ class CapsuleDetailScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final capsuleAsync = ref.watch(capsuleProvider(capsuleId));
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        leading: const AppBackButton(fallbackLocation: '/capsules'),
+      ),
       body: capsuleAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error:
@@ -66,16 +68,6 @@ class CapsuleDetailScreen extends ConsumerWidget {
                 icon: Icons.collections_bookmark_outlined,
                 label: context.l10n.itemsCount(capsule.itemCount),
               ),
-              if (capsule.emergencyAccessedAt != null)
-                _InfoRow(
-                  icon: Icons.warning_amber_rounded,
-                  label: context.l10n.emergencyRecorded(
-                    DateFormat.yMd(
-                      locale,
-                    ).add_Hm().format(capsule.emergencyAccessedAt!),
-                  ),
-                  color: const Color(0xFF8D594A),
-                ),
               const SizedBox(height: 24),
               if (status == CapsuleStatus.sealed ||
                   status == CapsuleStatus.emergencyAccessed)
@@ -124,26 +116,6 @@ class CapsuleDetailScreen extends ConsumerWidget {
     Capsule capsule, {
     required bool firstOpening,
   }) async {
-    final result = await ref
-        .read(authenticationProvider)
-        .authenticate(context.l10n.authenticatePrompt);
-    if (!context.mounted) return;
-    if (result != AuthenticationResult.success) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            result == AuthenticationResult.unavailable
-                ? context.l10n.deviceSecurityMissing
-                : context.l10n.authenticationFailed,
-          ),
-        ),
-      );
-      return;
-    }
-    ref.read(accessGrantsProvider.notifier).state = {
-      ...ref.read(accessGrantsProvider),
-      capsule.id: DateTime.now().add(const Duration(minutes: 2)),
-    };
     if (firstOpening) {
       await ref
           .read(capsuleRepositoryProvider)
@@ -151,7 +123,7 @@ class CapsuleDetailScreen extends ConsumerWidget {
       ref.invalidate(capsuleProvider(capsule.id));
       ref.invalidate(capsulesProvider);
       if (context.mounted) {
-        context.pushReplacement('/capsule/${capsule.id}/opening');
+        context.push('/capsule/${capsule.id}/opening');
       }
     } else {
       context.push('/capsule/${capsule.id}/content');
@@ -182,10 +154,6 @@ class CapsuleDetailScreen extends ConsumerWidget {
           ),
     );
     if (confirmed != true || !context.mounted) return;
-    final auth = await ref
-        .read(authenticationProvider)
-        .authenticate(context.l10n.authenticatePrompt);
-    if (auth != AuthenticationResult.success || !context.mounted) return;
     await ref
         .read(capsuleRepositoryProvider)
         .moveToTrash(capsule.id, DateTime.now());
@@ -195,19 +163,18 @@ class CapsuleDetailScreen extends ConsumerWidget {
 }
 
 class _InfoRow extends StatelessWidget {
-  const _InfoRow({required this.icon, required this.label, this.color});
+  const _InfoRow({required this.icon, required this.label});
   final IconData icon;
   final String label;
-  final Color? color;
   @override
   Widget build(BuildContext context) => Padding(
     padding: const EdgeInsets.symmetric(vertical: 8),
     child: Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Icon(icon, size: 21, color: color ?? AppColors.secondaryInk),
+        Icon(icon, size: 21, color: AppColors.secondaryInk),
         const SizedBox(width: 12),
-        Expanded(child: Text(label, style: TextStyle(color: color))),
+        Expanded(child: Text(label)),
       ],
     ),
   );

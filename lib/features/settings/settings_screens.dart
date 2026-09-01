@@ -6,7 +6,7 @@ import 'package:share_plus/share_plus.dart';
 
 import '../../app/providers.dart';
 import '../../app/theme/app_theme.dart';
-import '../../core/authentication/authentication_service.dart';
+import '../../core/navigation/app_navigation.dart';
 import '../../core/notifications/notification_service.dart';
 import '../../l10n/l10n.dart';
 import '../capsules/domain/capsule_models.dart';
@@ -43,17 +43,6 @@ class SettingsScreen extends ConsumerWidget {
           onTap: () => context.push('/settings/categories'),
         ),
         _section(context.l10n.privacySecurity),
-        _tile(
-          Icons.fingerprint_rounded,
-          context.l10n.deviceAuthentication,
-          subtitle: context.l10n.authenticatePrompt,
-          onTap: () => _testAuthentication(context, ref),
-        ),
-        _tile(
-          Icons.shield_outlined,
-          context.l10n.emergencyMode,
-          onTap: () => context.push('/emergency'),
-        ),
         _tile(
           Icons.delete_outline_rounded,
           context.l10n.trash,
@@ -157,23 +146,6 @@ class SettingsScreen extends ConsumerWidget {
       await ref.read(appPreferencesProvider).setLocale(Locale(selected));
     }
   }
-
-  Future<void> _testAuthentication(BuildContext context, WidgetRef ref) async {
-    final result = await ref
-        .read(authenticationProvider)
-        .authenticate(context.l10n.authenticatePrompt);
-    if (context.mounted && result != AuthenticationResult.success) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            result == AuthenticationResult.unavailable
-                ? context.l10n.deviceSecurityMissing
-                : context.l10n.authenticationFailed,
-          ),
-        ),
-      );
-    }
-  }
 }
 
 class NotificationSettingsScreen extends ConsumerWidget {
@@ -184,7 +156,10 @@ class NotificationSettingsScreen extends ConsumerWidget {
     final controller = ref.watch(appPreferencesProvider);
     final preferences = controller.value;
     return Scaffold(
-      appBar: AppBar(title: Text(context.l10n.notifications)),
+      appBar: AppBar(
+        leading: const AppBackButton(fallbackLocation: '/settings'),
+        title: Text(context.l10n.notifications),
+      ),
       body: ListView(
         padding: const EdgeInsets.all(20),
         children: [
@@ -243,7 +218,10 @@ class CategoriesScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final categories = ref.watch(categoriesProvider);
     return Scaffold(
-      appBar: AppBar(title: Text(context.l10n.manageCategories)),
+      appBar: AppBar(
+        leading: const AppBackButton(fallbackLocation: '/settings'),
+        title: Text(context.l10n.manageCategories),
+      ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => _create(context, ref),
         icon: const Icon(Icons.add),
@@ -363,7 +341,10 @@ class TrashScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final capsules = ref.watch(trashedCapsulesProvider);
     return Scaffold(
-      appBar: AppBar(title: Text(context.l10n.trash)),
+      appBar: AppBar(
+        leading: const AppBackButton(fallbackLocation: '/settings'),
+        title: Text(context.l10n.trash),
+      ),
       body: capsules.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error:
@@ -425,10 +406,25 @@ class TrashScreen extends ConsumerWidget {
     WidgetRef ref,
     Capsule capsule,
   ) async {
-    final auth = await ref
-        .read(authenticationProvider)
-        .authenticate(context.l10n.authenticatePrompt);
-    if (auth != AuthenticationResult.success) return;
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder:
+          (context) => AlertDialog(
+            title: Text(context.l10n.deleteForever),
+            content: Text(context.l10n.deleteForeverQuestion),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context, false),
+                child: Text(context.l10n.cancel),
+              ),
+              FilledButton(
+                onPressed: () => Navigator.pop(context, true),
+                child: Text(context.l10n.deleteForever),
+              ),
+            ],
+          ),
+    );
+    if (confirmed != true || !context.mounted) return;
     final paths = await ref
         .read(capsuleRepositoryProvider)
         .deleteForever(capsule.id);
@@ -447,7 +443,10 @@ class _BackupScreenState extends ConsumerState<BackupScreen> {
   bool _busy = false;
   @override
   Widget build(BuildContext context) => Scaffold(
-    appBar: AppBar(title: Text(context.l10n.backups)),
+    appBar: AppBar(
+      leading: const AppBackButton(fallbackLocation: '/settings'),
+      title: Text(context.l10n.backups),
+    ),
     body: Stack(
       children: [
         ListView(
@@ -548,10 +547,6 @@ class _BackupScreenState extends ConsumerState<BackupScreen> {
   }
 
   Future<void> _create() async {
-    final auth = await ref
-        .read(authenticationProvider)
-        .authenticate(context.l10n.authenticatePrompt);
-    if (auth != AuthenticationResult.success || !mounted) return;
     final password = await _password(confirm: true);
     if (password == null || !mounted) return;
     final shareHint = context.l10n.backupPasswordHint;
@@ -627,7 +622,10 @@ class StorageScreen extends ConsumerWidget {
   const StorageScreen({super.key});
   @override
   Widget build(BuildContext context, WidgetRef ref) => Scaffold(
-    appBar: AppBar(title: Text(context.l10n.storageUsage)),
+    appBar: AppBar(
+      leading: const AppBackButton(fallbackLocation: '/settings'),
+      title: Text(context.l10n.storageUsage),
+    ),
     body: FutureBuilder<_StorageData>(
       future: _load(ref),
       builder: (context, snapshot) {

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
@@ -15,6 +16,8 @@ import 'package:uuid/uuid.dart';
 import '../../app/providers.dart';
 import '../../app/theme/app_theme.dart';
 import '../../core/notifications/notification_service.dart';
+import '../../core/navigation/app_navigation.dart';
+import '../../core/storage/custom_cover_id.dart';
 import '../../core/tutorial/tutorial_helper.dart';
 import '../../core/widgets/capsule_cover.dart';
 import '../../l10n/l10n.dart';
@@ -62,6 +65,7 @@ class _CreationScreenState extends ConsumerState<CreationScreen> {
   late DateTime _unlockAt;
   bool _includesTime = false;
   bool _tutorialShowing = false;
+  Timer? _tutorialTimer;
 
   @override
   void initState() {
@@ -102,6 +106,7 @@ class _CreationScreenState extends ConsumerState<CreationScreen> {
 
   @override
   void dispose() {
+    _tutorialTimer?.cancel();
     _pageController.dispose();
     _titleController.dispose();
     _descriptionController.dispose();
@@ -253,10 +258,7 @@ class _CreationScreenState extends ConsumerState<CreationScreen> {
           Card(
             margin: const EdgeInsets.only(bottom: 10),
             child: ListTile(
-              leading: CircleAvatar(
-                backgroundColor: _typeColor(item.type),
-                child: Icon(_typeIcon(item.type), color: AppColors.ink),
-              ),
+              leading: _itemPreview(item),
               title: Text(_typeLabel(item.type)),
               subtitle: Text(context.l10n.itemsCount(1)),
               trailing: IconButton(
@@ -329,10 +331,9 @@ class _CreationScreenState extends ConsumerState<CreationScreen> {
         ),
         const SizedBox(height: 12),
         GridView.builder(
-          key: widget.tutorial ? _coversTutorialKey : null,
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
-          itemCount: capsuleCoverIds.length,
+          itemCount: capsuleCoverIds.length + 1,
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 3,
             mainAxisExtent: 94,
@@ -340,10 +341,11 @@ class _CreationScreenState extends ConsumerState<CreationScreen> {
             crossAxisSpacing: 10,
           ),
           itemBuilder: (context, index) {
-            final id = capsuleCoverIds[index];
+            if (index == 0) return _customCoverTile();
+            final id = capsuleCoverIds[index - 1];
             return InkWell(
               borderRadius: BorderRadius.circular(20),
-              onTap: () => setState(() => _coverId = id),
+              onTap: _busy ? null : () => unawaited(_selectBuiltInCover(id)),
               child: Stack(
                 children: [
                   CapsuleCover(coverId: id, height: 94),
@@ -367,6 +369,61 @@ class _CreationScreenState extends ConsumerState<CreationScreen> {
           },
         ),
       ],
+    );
+  }
+
+  Widget _customCoverTile() {
+    final selected = isCustomCoverId(_coverId);
+    return InkWell(
+      key: widget.tutorial ? _coversTutorialKey : null,
+      borderRadius: BorderRadius.circular(20),
+      onTap: _busy ? null : _pickCustomCover,
+      child: Stack(
+        children: [
+          if (selected)
+            CapsuleCover(coverId: _coverId, height: 94)
+          else
+            Container(
+              height: 94,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: AppColors.paleRose,
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(color: AppColors.dustyRose),
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(
+                    Icons.add_photo_alternate_outlined,
+                    color: AppColors.dustyRose,
+                    size: 29,
+                  ),
+                  const SizedBox(height: 5),
+                  Text(
+                    context.l10n.customCover,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                      color: AppColors.ink,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          if (selected)
+            const Positioned(
+              right: 6,
+              top: 6,
+              child: CircleAvatar(
+                radius: 12,
+                backgroundColor: AppColors.dustyRose,
+                child: Icon(Icons.check_rounded, size: 16, color: Colors.white),
+              ),
+            ),
+        ],
+      ),
     );
   }
 
@@ -581,7 +638,7 @@ class _CreationScreenState extends ConsumerState<CreationScreen> {
         if (widget.tutorial) {
           context.go('/capsules?tutorial=true');
         } else {
-          context.go('/capsule/${sealed.id}');
+          context.pushReplacement('/capsule/${sealed.id}');
         }
       }
     } finally {
@@ -624,6 +681,91 @@ class _CreationScreenState extends ConsumerState<CreationScreen> {
           ),
         ),
   );
+
+  Future<void> _pickCustomCover() async {
+    final draft = _draft;
+    if (draft == null || _busy) return;
+    final source = await _sourceDialog();
+    if (source == null) return;
+    final file = await _picker.pickImage(
+      source: source,
+      maxWidth: 1600,
+      maxHeight: 1600,
+      imageQuality: 88,
+    );
+    if (file == null || !mounted) return;
+
+    setState(() => _busy = true);
+    String? encryptedPath;
+    try {
+      final key = await ref.read(keyServiceProvider).getOrCreateMasterKey();
+      encryptedPath = await ref
+          .read(storageProvider)
+          .importAndEncrypt(
+            file.path,
+            key,
+            deleteSource: source == ImageSource.camera,
+          );
+      final newCoverId = customCoverId(encryptedPath);
+      final updatedDraft = draft.copyWith(coverId: newCoverId);
+      await ref.read(capsuleRepositoryProvider).updateDraft(updatedDraft);
+
+      final previousPath = customCoverPath(_coverId);
+      if (mounted) {
+        setState(() {
+          _draft = updatedDraft;
+          _coverId = newCoverId;
+        });
+      }
+      if (previousPath != null && previousPath != encryptedPath) {
+        await _deleteCoverFileQuietly(previousPath);
+      }
+    } catch (_) {
+      if (encryptedPath != null) {
+        await _deleteCoverFileQuietly(encryptedPath);
+      }
+      if (mounted) _message(context.l10n.importError);
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
+  }
+
+  Future<void> _selectBuiltInCover(String coverId) async {
+    if (_coverId == coverId || _busy) return;
+    final draft = _draft;
+    if (draft == null) {
+      setState(() => _coverId = coverId);
+      return;
+    }
+
+    setState(() => _busy = true);
+    try {
+      final previousPath = customCoverPath(_coverId);
+      final updatedDraft = draft.copyWith(coverId: coverId);
+      await ref.read(capsuleRepositoryProvider).updateDraft(updatedDraft);
+      if (mounted) {
+        setState(() {
+          _draft = updatedDraft;
+          _coverId = coverId;
+        });
+      }
+      if (previousPath != null) {
+        await _deleteCoverFileQuietly(previousPath);
+      }
+    } catch (_) {
+      if (mounted) _message(context.l10n.importError);
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
+  }
+
+  Future<void> _deleteCoverFileQuietly(String path) async {
+    try {
+      await ref.read(storageProvider).deleteEncryptedFiles([path]);
+    } catch (_) {
+      // A stale encrypted cover can be cleaned up by storage maintenance later.
+    }
+  }
 
   Future<void> _pickImage() async {
     final source = await _sourceDialog();
@@ -836,7 +978,8 @@ class _CreationScreenState extends ConsumerState<CreationScreen> {
   }
 
   void _scheduleTutorialStep() {
-    Future<void>.delayed(const Duration(milliseconds: 450), () {
+    if (_tutorialShowing || (_tutorialTimer?.isActive ?? false)) return;
+    _tutorialTimer = Timer(const Duration(milliseconds: 450), () {
       if (mounted) _showTutorialStep();
     });
   }
@@ -1067,7 +1210,7 @@ class _CreationScreenState extends ConsumerState<CreationScreen> {
           .read(capsuleRepositoryProvider)
           .discardDraft(_draft!.id);
       await ref.read(storageProvider).deleteEncryptedFiles(paths);
-      if (mounted) context.pop();
+      if (mounted) popOrGo(context, '/');
     }
   }
 
@@ -1080,6 +1223,53 @@ class _CreationScreenState extends ConsumerState<CreationScreen> {
     CapsuleItemType.audio => Icons.mic_none_rounded,
     CapsuleItemType.text => Icons.description_outlined,
   };
+  Widget _itemPreview(CapsuleItem item) {
+    final path = item.encryptedPath;
+    if (item.type != CapsuleItemType.image || path == null) {
+      return CircleAvatar(
+        backgroundColor: _typeColor(item.type),
+        child: Icon(_typeIcon(item.type), color: AppColors.ink),
+      );
+    }
+
+    final preview = ref.watch(privateImageBytesProvider(path));
+    return SizedBox.square(
+      dimension: 40,
+      child: ClipOval(
+        child: preview.when(
+          loading: () => _imagePreviewFallback(showProgress: true),
+          error: (_, __) => _imagePreviewFallback(),
+          data:
+              (bytes) =>
+                  bytes == null
+                      ? _imagePreviewFallback()
+                      : Image.memory(
+                        bytes,
+                        fit: BoxFit.cover,
+                        gaplessPlayback: true,
+                        errorBuilder: (_, __, ___) => _imagePreviewFallback(),
+                      ),
+        ),
+      ),
+    );
+  }
+
+  Widget _imagePreviewFallback({bool showProgress = false}) => ColoredBox(
+    color: AppColors.paleRose,
+    child: Center(
+      child:
+          showProgress
+              ? const SizedBox.square(
+                dimension: 15,
+                child: CircularProgressIndicator(strokeWidth: 2),
+              )
+              : const Icon(
+                Icons.photo_outlined,
+                size: 22,
+                color: AppColors.ink,
+              ),
+    ),
+  );
   Color _typeColor(CapsuleItemType type) => switch (type) {
     CapsuleItemType.image => AppColors.paleRose,
     CapsuleItemType.video => AppColors.paleSage,

@@ -34,9 +34,11 @@ void showTutorial({
   required String skipLabel,
   required VoidCallback onFinish,
   required Future<void> Function() onSkip,
+  FutureOr<void> Function(TargetFocus)? beforeFocus,
 }) {
   TutorialCoachMark(
     targets: targets,
+    beforeFocus: beforeFocus ?? revealTutorialTarget,
     colorShadow: AppColors.ink,
     opacityShadow: .88,
     textSkip: skipLabel,
@@ -46,6 +48,7 @@ void showTutorial({
     ),
     paddingFocus: 8,
     useSafeArea: true,
+    disableBackButton: true,
     showSkipInLastTarget: true,
     onFinish: onFinish,
     onSkip: () {
@@ -53,6 +56,17 @@ void showTutorial({
       return true;
     },
   ).show(context: context, rootOverlay: true);
+}
+
+Future<void> revealTutorialTarget(TargetFocus target) async {
+  final targetContext = target.keyTarget?.currentContext;
+  if (targetContext == null) return;
+  await Scrollable.ensureVisible(
+    targetContext,
+    alignment: .5,
+    duration: const Duration(milliseconds: 350),
+    curve: Curves.easeOutCubic,
+  );
 }
 
 class _TutorialMessage extends StatelessWidget {

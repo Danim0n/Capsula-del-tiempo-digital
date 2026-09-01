@@ -64,12 +64,6 @@ class AppLocalizationsEs extends AppLocalizations {
   String get chooseDate => 'Elegir fecha';
 
   @override
-  String get emergencyMode => 'Modo de emergencia';
-
-  @override
-  String get emergencySubtitle => 'Acceso seguro en casos especiales';
-
-  @override
   String get emptyCapsules => 'Tu primera cápsula empieza aquí';
 
   @override
@@ -90,9 +84,6 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get opened => 'Abiertas';
-
-  @override
-  String get emergency => 'Emergencia';
 
   @override
   String itemsCount(num count) {
@@ -130,9 +121,6 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get manageCategories => 'Gestionar categorías';
-
-  @override
-  String get deviceAuthentication => 'Autenticación del dispositivo';
 
   @override
   String get trash => 'Papelera';
@@ -225,6 +213,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get cover => 'Portada';
 
   @override
+  String get customCover => 'Tu foto';
+
+  @override
   String get next => 'Siguiente';
 
   @override
@@ -307,17 +298,6 @@ class AppLocalizationsEs extends AppLocalizations {
   String get openCapsule => 'Abrir cápsula';
 
   @override
-  String get authenticatePrompt =>
-      'Confirma tu identidad para ver tus recuerdos privados.';
-
-  @override
-  String get authenticationFailed => 'No se pudo autenticar.';
-
-  @override
-  String get deviceSecurityMissing =>
-      'Configura primero un bloqueo de pantalla seguro en tu dispositivo.';
-
-  @override
   String get opening => 'Abriendo tu cápsula…';
 
   @override
@@ -345,29 +325,11 @@ class AppLocalizationsEs extends AppLocalizations {
   String get deleteForever => 'Eliminar definitivamente';
 
   @override
+  String get deleteForeverQuestion =>
+      'Esta acción no se puede deshacer. ¿Quieres eliminar definitivamente esta cápsula?';
+
+  @override
   String get trashEmpty => 'La papelera está vacía';
-
-  @override
-  String get emergencyExplanation =>
-      'El modo de emergencia permite acceder anticipadamente a contenido sellado.';
-
-  @override
-  String get emergencyWarning =>
-      'La cápsula registrará que ha sido accedida antes de la fecha prevista.';
-
-  @override
-  String get selectCapsule => 'Selecciona una cápsula cerrada';
-
-  @override
-  String get holdEmergency => 'Mantén pulsado durante 3 segundos';
-
-  @override
-  String get emergencyAccess => 'Acceder de emergencia';
-
-  @override
-  String emergencyRecorded(Object date) {
-    return 'Acceso de emergencia realizado el $date.';
-  }
 
   @override
   String get notificationOpening => 'Aviso al llegar la apertura';
@@ -519,7 +481,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get tutorialCoversBody =>
-      'Cada portada da una identidad distinta a la cápsula. Toca cualquiera para seleccionarla.';
+      'Elige una portada o toca «Tu foto» para usar una imagen de la cámara o la galería.';
 
   @override
   String get tutorialQuickDatesTitle => 'Fechas rápidas';
@@ -555,20 +517,6 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get tutorialCapsulesBody =>
       'En Mis cápsulas puedes encontrar, buscar y filtrar las cápsulas que hayas creado.';
-
-  @override
-  String get tutorialEmergencyTitle => 'Modo de emergencia';
-
-  @override
-  String get tutorialEmergencyBody =>
-      'Permite acceder antes de tiempo a una cápsula sellada después de confirmar tu identidad. El acceso anticipado queda registrado.';
-
-  @override
-  String get tutorialEmergencyWarningTitle => 'Úsalo solo cuando sea necesario';
-
-  @override
-  String get tutorialEmergencyWarningBody =>
-      'Tras elegir una cápsula deberás mantener pulsado el botón durante 3 segundos. Esta acción no pasa desapercibida: queda anotada en la cápsula.';
 
   @override
   String get tutorialComplete =>

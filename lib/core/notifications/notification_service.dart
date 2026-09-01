@@ -34,7 +34,7 @@ class NotificationService {
     }
     await _plugin.initialize(
       settings: const InitializationSettings(
-        android: AndroidInitializationSettings('@mipmap/ic_launcher'),
+        android: AndroidInitializationSettings('ic_notification'),
         iOS: DarwinInitializationSettings(
           requestAlertPermission: false,
           requestBadgePermission: false,
@@ -65,6 +65,7 @@ class NotificationService {
         'capsule_openings',
         'Aperturas de cápsulas',
         channelDescription: 'Avisos y recordatorios de cápsulas del tiempo',
+        icon: 'ic_notification',
         importance: Importance.high,
         priority: Priority.high,
       ),

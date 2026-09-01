@@ -7,7 +7,6 @@ list(APPEND FLUTTER_PLUGIN_LIST
   flutter_secure_storage_windows
   flutter_timezone
   gal
-  local_auth_windows
   record_windows
   share_plus
   sqlite3_flutter_libs

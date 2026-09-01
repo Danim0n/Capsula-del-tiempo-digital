@@ -12,6 +12,7 @@ import '../../features/capsules/data/capsule_repository.dart';
 import '../encryption/encryption_service.dart';
 import '../encryption/key_service.dart';
 import '../storage/private_storage_service.dart';
+import '../storage/custom_cover_id.dart';
 import 'backup_codec.dart';
 
 class BackupSummary {
@@ -206,6 +207,15 @@ class BackupService {
       await staging.rename(currentVault.path);
       await keys.setMasterKey(SecretKey(parsed.masterKey));
       final database = parsed.manifest['database'] as Map<String, dynamic>;
+      for (final raw in database['capsules'] as List) {
+        final capsule = raw as Map<String, dynamic>;
+        final oldCoverPath = customCoverPath(capsule['coverId'] as String);
+        if (oldCoverPath != null) {
+          capsule['coverId'] = customCoverId(
+            p.join(currentVault.path, p.basename(oldCoverPath)),
+          );
+        }
+      }
       for (final raw in database['items'] as List) {
         final item = raw as Map<String, dynamic>;
         final oldPath = item['encryptedPath'] as String?;

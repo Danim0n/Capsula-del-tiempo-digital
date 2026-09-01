@@ -1,9 +1,9 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:lottie/lottie.dart';
 
 import '../../../app/theme/app_theme.dart';
+import '../../../core/navigation/app_navigation.dart';
 import '../../../l10n/l10n.dart';
 
 class OpeningScreen extends StatefulWidget {
@@ -16,25 +16,33 @@ class OpeningScreen extends StatefulWidget {
 class _OpeningScreenState extends State<OpeningScreen>
     with SingleTickerProviderStateMixin {
   late final AnimationController _controller;
-  Timer? _timer;
+  bool _loaded = false;
+  bool _finished = false;
 
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 3000),
-    )..forward();
-    _timer = Timer(const Duration(milliseconds: 3100), _finish);
+    _controller = AnimationController(vsync: this)..addStatusListener((status) {
+      if (status == AnimationStatus.completed) _finish();
+    });
   }
 
   void _finish() {
-    if (mounted) context.go('/capsule/${widget.capsuleId}/content');
+    if (!mounted || _finished) return;
+    _finished = true;
+    context.pushReplacement('/capsule/${widget.capsuleId}/content');
+  }
+
+  void _startAnimation(LottieComposition composition) {
+    if (_loaded) return;
+    setState(() => _loaded = true);
+    _controller
+      ..duration = composition.duration
+      ..forward(from: 0);
   }
 
   @override
   void dispose() {
-    _timer?.cancel();
     _controller.dispose();
     super.dispose();
   }
@@ -53,60 +61,16 @@ class _OpeningScreenState extends State<OpeningScreen>
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     SizedBox(
-                      width: 250,
-                      height: 220,
-                      child: Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          Transform.translate(
-                            offset: Offset(0, -55 * value),
-                            child: Transform.rotate(
-                              angle: -.08 * value,
-                              child: Container(
-                                width: 195,
-                                height: 110,
-                                decoration: BoxDecoration(
-                                  color: AppColors.paleSage,
-                                  borderRadius: BorderRadius.circular(20),
-                                  border: Border.all(
-                                    color: AppColors.ink.withValues(alpha: .15),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          Positioned(
-                            bottom: 20,
-                            child: Container(
-                              width: 220,
-                              height: 125,
-                              decoration: BoxDecoration(
-                                color: AppColors.sage,
-                                borderRadius: BorderRadius.circular(24),
-                                boxShadow: const [
-                                  BoxShadow(
-                                    color: Color(0x18000000),
-                                    blurRadius: 22,
-                                    offset: Offset(0, 10),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          Positioned(
-                            bottom: 76,
-                            child: Transform.scale(
-                              scale: 1 - .18 * value,
-                              child: Icon(
-                                value > .52
-                                    ? Icons.lock_open_rounded
-                                    : Icons.lock_rounded,
-                                size: 46,
-                                color: AppColors.ink,
-                              ),
-                            ),
-                          ),
-                        ],
+                      width: 430,
+                      height: 430,
+                      child: Lottie.asset(
+                        'assets/animations/giftbox_open.lottie',
+                        controller: _controller,
+                        decoder: _decodeDotLottie,
+                        fit: BoxFit.cover,
+                        repeat: false,
+                        frameRate: FrameRate.max,
+                        onLoaded: _startAnimation,
                       ),
                     ),
                     Opacity(
@@ -120,10 +84,15 @@ class _OpeningScreenState extends State<OpeningScreen>
                 ),
               ),
               Positioned(
+                left: 6,
+                top: 4,
+                child: const AppBackButton(fallbackLocation: '/capsules'),
+              ),
+              Positioned(
                 right: 14,
                 top: 8,
                 child: TextButton(
-                  onPressed: _controller.value > .12 ? _finish : null,
+                  onPressed: _loaded && value > .12 ? _finish : null,
                   child: Text(context.l10n.skipAnimation),
                 ),
               ),
@@ -134,3 +103,14 @@ class _OpeningScreenState extends State<OpeningScreen>
     ),
   );
 }
+
+Future<LottieComposition?> _decodeDotLottie(List<int> bytes) =>
+    LottieComposition.decodeZip(
+      bytes,
+      filePicker:
+          (files) => files.firstWhere(
+            (file) =>
+                file.name.startsWith('animations/') &&
+                file.name.endsWith('.json'),
+          ),
+    );

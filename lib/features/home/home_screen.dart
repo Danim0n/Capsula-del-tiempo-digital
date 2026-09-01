@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
 import '../../app/providers.dart';
 import '../../app/theme/app_theme.dart';
@@ -22,6 +25,7 @@ class HomeScreen extends ConsumerStatefulWidget {
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   final _textTutorialKey = GlobalKey();
   bool _tutorialScheduled = false;
+  Timer? _tutorialRetry;
 
   @override
   void initState() {
@@ -39,6 +43,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   @override
+  void dispose() {
+    _tutorialRetry?.cancel();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final capsules =
         ref.watch(capsulesProvider).valueOrNull ?? const <Capsule>[];
@@ -50,6 +60,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
     return Scaffold(
       body: SafeArea(
+        top: false,
         bottom: false,
         child: Center(
           child: ConstrainedBox(
@@ -90,7 +101,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     if (!mounted || _tutorialScheduled) return;
     final preferences = ref.read(appPreferencesProvider).value;
     if (!widget.tutorial && preferences.tutorialComplete) return;
-    if (_textTutorialKey.currentContext == null) return;
+    if (_textTutorialKey.currentContext == null) {
+      _scheduleTutorialRetry();
+      return;
+    }
     _tutorialScheduled = true;
     showTutorial(
       context: context,
@@ -101,15 +115,26 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           key: _textTutorialKey,
           title: context.l10n.tutorialHomeTitle,
           body: context.l10n.tutorialHomeBody,
+          align: ContentAlign.top,
         ),
       ],
       onFinish: () {
         if (mounted) context.push('/create?tutorial=true');
       },
-      onSkip: () async {
-        await ref.read(appPreferencesProvider).completeTutorial();
-      },
+      onSkip: _skipTutorial,
     );
+  }
+
+  void _scheduleTutorialRetry() {
+    _tutorialRetry?.cancel();
+    _tutorialRetry = Timer(const Duration(milliseconds: 250), () {
+      if (mounted) _maybeShowTutorial();
+    });
+  }
+
+  Future<void> _skipTutorial() async {
+    await ref.read(appPreferencesProvider).completeTutorial();
+    if (mounted) context.go('/');
   }
 }
 

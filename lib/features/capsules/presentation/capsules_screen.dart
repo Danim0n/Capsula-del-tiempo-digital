@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -10,7 +12,7 @@ import '../domain/capsule_models.dart';
 import 'capsule_card.dart';
 import '../../categories/category_localization.dart';
 
-enum CapsuleFilter { all, closed, ready, opened, emergency }
+enum CapsuleFilter { all, closed, ready, opened }
 
 enum CapsuleSort { next, recent, oldest, name }
 
@@ -28,6 +30,7 @@ class _CapsulesScreenState extends ConsumerState<CapsulesScreen> {
   CapsuleFilter _filter = CapsuleFilter.all;
   CapsuleSort _sort = CapsuleSort.next;
   bool _tutorialScheduled = false;
+  Timer? _tutorialRetry;
 
   @override
   void initState() {
@@ -36,7 +39,17 @@ class _CapsulesScreenState extends ConsumerState<CapsulesScreen> {
   }
 
   @override
+  void didUpdateWidget(covariant CapsulesScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.tutorial && !oldWidget.tutorial) {
+      _tutorialScheduled = false;
+      WidgetsBinding.instance.addPostFrameCallback((_) => _maybeShowTutorial());
+    }
+  }
+
+  @override
   void dispose() {
+    _tutorialRetry?.cancel();
     _search.dispose();
     super.dispose();
   }
@@ -48,7 +61,6 @@ class _CapsulesScreenState extends ConsumerState<CapsulesScreen> {
       appBar: AppBar(
         title: Text(
           context.l10n.myCapsules,
-          key: widget.tutorial ? _tutorialKey : null,
           style: emotionalTitle(context, size: 32),
         ),
         actions: [
@@ -98,39 +110,42 @@ class _CapsulesScreenState extends ConsumerState<CapsulesScreen> {
             slivers: [
               SliverPadding(
                 padding: const EdgeInsets.fromLTRB(20, 8, 20, 12),
-                sliver: SliverList.list(
-                  children: [
-                    TextField(
-                      controller: _search,
-                      onChanged: (_) => setState(() {}),
-                      decoration: InputDecoration(
-                        prefixIcon: const Icon(Icons.search_rounded),
-                        hintText: context.l10n.search,
+                sliver: SliverToBoxAdapter(
+                  child: Column(
+                    key: widget.tutorial ? _tutorialKey : null,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      TextField(
+                        controller: _search,
+                        onChanged: (_) => setState(() {}),
+                        decoration: InputDecoration(
+                          prefixIcon: const Icon(Icons.search_rounded),
+                          hintText: context.l10n.search,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 13),
-                    SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        children: [
-                          _filterChip(CapsuleFilter.all, context.l10n.all),
-                          _filterChip(
-                            CapsuleFilter.closed,
-                            context.l10n.closed,
-                          ),
-                          _filterChip(CapsuleFilter.ready, context.l10n.ready),
-                          _filterChip(
-                            CapsuleFilter.opened,
-                            context.l10n.opened,
-                          ),
-                          _filterChip(
-                            CapsuleFilter.emergency,
-                            context.l10n.emergency,
-                          ),
-                        ],
+                      const SizedBox(height: 13),
+                      SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: [
+                            _filterChip(CapsuleFilter.all, context.l10n.all),
+                            _filterChip(
+                              CapsuleFilter.closed,
+                              context.l10n.closed,
+                            ),
+                            _filterChip(
+                              CapsuleFilter.ready,
+                              context.l10n.ready,
+                            ),
+                            _filterChip(
+                              CapsuleFilter.opened,
+                              context.l10n.opened,
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
               if (visible.isEmpty)
@@ -188,7 +203,10 @@ class _CapsulesScreenState extends ConsumerState<CapsulesScreen> {
 
   void _maybeShowTutorial() {
     if (!mounted || !widget.tutorial || _tutorialScheduled) return;
-    if (_tutorialKey.currentContext == null) return;
+    if (_tutorialKey.currentContext == null) {
+      _scheduleTutorialRetry();
+      return;
+    }
     _tutorialScheduled = true;
     showTutorial(
       context: context,
@@ -201,13 +219,32 @@ class _CapsulesScreenState extends ConsumerState<CapsulesScreen> {
           body: context.l10n.tutorialCapsulesBody,
         ),
       ],
-      onFinish: () {
-        if (mounted) context.push('/emergency?tutorial=true');
-      },
-      onSkip: () async {
-        await ref.read(appPreferencesProvider).completeTutorial();
-      },
+      onFinish: _completeTutorial,
+      onSkip: _skipTutorial,
     );
+  }
+
+  void _scheduleTutorialRetry() {
+    _tutorialRetry?.cancel();
+    _tutorialRetry = Timer(const Duration(milliseconds: 250), () {
+      if (mounted) _maybeShowTutorial();
+    });
+  }
+
+  Future<void> _completeTutorial() async {
+    await ref.read(appPreferencesProvider).completeTutorial();
+    if (!mounted) return;
+    context.go('/capsules');
+    await WidgetsBinding.instance.endOfFrame;
+    if (!mounted) return;
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(context.l10n.tutorialComplete)));
+  }
+
+  Future<void> _skipTutorial() async {
+    await ref.read(appPreferencesProvider).completeTutorial();
+    if (mounted) context.go('/capsules');
   }
 
   Widget _filterChip(CapsuleFilter value, String label) => Padding(
@@ -244,7 +281,6 @@ class _CapsulesScreenState extends ConsumerState<CapsulesScreen> {
             CapsuleFilter.closed => status == CapsuleStatus.sealed,
             CapsuleFilter.ready => status == CapsuleStatus.readyToOpen,
             CapsuleFilter.opened => status == CapsuleStatus.opened,
-            CapsuleFilter.emergency => capsule.emergencyAccessedAt != null,
           };
         }).toList();
     result.sort(switch (_sort) {
