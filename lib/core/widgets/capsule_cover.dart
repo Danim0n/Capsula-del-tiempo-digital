@@ -18,6 +18,18 @@ const capsuleCoverIds = [
   'cover_10',
   'cover_11',
   'cover_12',
+  'cover_13',
+  'cover_14',
+  'cover_15',
+  'cover_16',
+  'cover_17',
+  'cover_18',
+  'cover_19',
+  'cover_20',
+  'cover_21',
+  'cover_22',
+  'cover_23',
+  'cover_24',
 ];
 
 class CapsuleCover extends ConsumerWidget {
@@ -37,8 +49,10 @@ class CapsuleCover extends ConsumerWidget {
     final index = capsuleCoverIds
         .indexOf(coverId)
         .clamp(0, capsuleCoverIds.length - 1);
+    final coverNumber = index + 1;
+    final extension = coverNumber <= 12 ? 'png' : 'webp';
     final assetName =
-        'assets/images/covers/cover_${(index + 1).toString().padLeft(2, '0')}.png';
+        'assets/images/covers/cover_${coverNumber.toString().padLeft(2, '0')}.$extension';
     return ClipRRect(
       borderRadius: BorderRadius.circular(24),
       child: SizedBox(

@@ -446,6 +446,42 @@ abstract class AppLocalizations {
   /// **'Revisa tu cápsula'**
   String get reviewStep;
 
+  /// No description provided for @previewMemory.
+  ///
+  /// In es, this message translates to:
+  /// **'Vista previa'**
+  String get previewMemory;
+
+  /// No description provided for @previewContent.
+  ///
+  /// In es, this message translates to:
+  /// **'Comprueba tus recuerdos'**
+  String get previewContent;
+
+  /// No description provided for @previewMemoryHint.
+  ///
+  /// In es, this message translates to:
+  /// **'Toca un recuerdo para verlo o reproducirlo.'**
+  String get previewMemoryHint;
+
+  /// No description provided for @previewDraftHint.
+  ///
+  /// In es, this message translates to:
+  /// **'Estás viendo un borrador. Puedes volver para seguir preparando tu cápsula sin cambiar su contenido.'**
+  String get previewDraftHint;
+
+  /// No description provided for @previewDraftOnly.
+  ///
+  /// In es, this message translates to:
+  /// **'La vista previa solo está disponible antes de sellar la cápsula.'**
+  String get previewDraftOnly;
+
+  /// No description provided for @previewImageHint.
+  ///
+  /// In es, this message translates to:
+  /// **'Separa dos dedos sobre la foto para ampliarla.'**
+  String get previewImageHint;
+
   /// No description provided for @title.
   ///
   /// In es, this message translates to:
@@ -535,6 +571,96 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Grabar'**
   String get record;
+
+  /// No description provided for @recordingTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Grabar audio'**
+  String get recordingTitle;
+
+  /// No description provided for @recordingReady.
+  ///
+  /// In es, this message translates to:
+  /// **'Listo para empezar'**
+  String get recordingReady;
+
+  /// No description provided for @recordingActive.
+  ///
+  /// In es, this message translates to:
+  /// **'Grabando…'**
+  String get recordingActive;
+
+  /// No description provided for @recordingPaused.
+  ///
+  /// In es, this message translates to:
+  /// **'Grabación en pausa'**
+  String get recordingPaused;
+
+  /// No description provided for @recordingInterrupted.
+  ///
+  /// In es, this message translates to:
+  /// **'Grabación interrumpida'**
+  String get recordingInterrupted;
+
+  /// No description provided for @recordingStart.
+  ///
+  /// In es, this message translates to:
+  /// **'Comenzar grabación'**
+  String get recordingStart;
+
+  /// No description provided for @recordingPause.
+  ///
+  /// In es, this message translates to:
+  /// **'Pausar grabación'**
+  String get recordingPause;
+
+  /// No description provided for @recordingResume.
+  ///
+  /// In es, this message translates to:
+  /// **'Continuar grabación'**
+  String get recordingResume;
+
+  /// No description provided for @recordingStop.
+  ///
+  /// In es, this message translates to:
+  /// **'Detener y guardar'**
+  String get recordingStop;
+
+  /// No description provided for @recordingHint.
+  ///
+  /// In es, this message translates to:
+  /// **'Pulsa el micrófono para empezar. Puedes pausar y continuar; al detener se añade el audio a tu cápsula.'**
+  String get recordingHint;
+
+  /// No description provided for @recordingPermission.
+  ///
+  /// In es, this message translates to:
+  /// **'Permite el acceso al micrófono para grabar. Si lo has bloqueado, actívalo en los ajustes de tu dispositivo.'**
+  String get recordingPermission;
+
+  /// No description provided for @recordingError.
+  ///
+  /// In es, this message translates to:
+  /// **'No se ha podido completar la grabación. Comprueba el micrófono y el espacio disponible. Puedes volver a intentarlo o cancelar.'**
+  String get recordingError;
+
+  /// No description provided for @recordingMeterError.
+  ///
+  /// In es, this message translates to:
+  /// **'No se puede mostrar el nivel de sonido. La grabación puede continuar.'**
+  String get recordingMeterError;
+
+  /// No description provided for @recordingDiscardQuestion.
+  ///
+  /// In es, this message translates to:
+  /// **'¿Descartar esta grabación?'**
+  String get recordingDiscardQuestion;
+
+  /// No description provided for @recordingDiscardHint.
+  ///
+  /// In es, this message translates to:
+  /// **'El audio no se añadirá a la cápsula. Si quieres conservarlo, vuelve y pulsa detener.'**
+  String get recordingDiscardHint;
 
   /// No description provided for @write.
   ///
@@ -1057,6 +1183,348 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Tutorial completado. Puedes repetirlo cuando quieras desde Ajustes.'**
   String get tutorialComplete;
+
+  /// No description provided for @nearbyTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Transferir cerca'**
+  String get nearbyTitle;
+
+  /// No description provided for @nearbySend.
+  ///
+  /// In es, this message translates to:
+  /// **'Enviar a alguien cercano'**
+  String get nearbySend;
+
+  /// No description provided for @nearbyReceive.
+  ///
+  /// In es, this message translates to:
+  /// **'Recibir cápsula'**
+  String get nearbyReceive;
+
+  /// No description provided for @nearbyIntro.
+  ///
+  /// In es, this message translates to:
+  /// **'Comparte una cápsula con otro Android cercano, sin Internet ni nube. Ambos debéis tener esta versión de la app abierta, Wi-Fi y Bluetooth activados. En Android antiguos puede hacer falta activar la ubicación.'**
+  String get nearbyIntro;
+
+  /// No description provided for @nearbyPrivacy.
+  ///
+  /// In es, this message translates to:
+  /// **'Se enviará solo la cápsula elegida, con su contenido y portada. La copia conserva la fecha de apertura y ocupa espacio en ambos móviles. No se sincronizan cambios posteriores.'**
+  String get nearbyPrivacy;
+
+  /// No description provided for @nearbyUnsupported.
+  ///
+  /// In es, this message translates to:
+  /// **'La transferencia cercana está disponible entre móviles Android con servicios de Google Play. Puedes seguir usando la exportación habitual en las plataformas compatibles.'**
+  String get nearbyUnsupported;
+
+  /// No description provided for @nearbyExport.
+  ///
+  /// In es, this message translates to:
+  /// **'Exportación y copias actuales'**
+  String get nearbyExport;
+
+  /// No description provided for @nearbyName.
+  ///
+  /// In es, this message translates to:
+  /// **'Tu nombre para esta conexión'**
+  String get nearbyName;
+
+  /// No description provided for @nearbyChoose.
+  ///
+  /// In es, this message translates to:
+  /// **'Elige una cápsula sellada'**
+  String get nearbyChoose;
+
+  /// No description provided for @nearbyEmpty.
+  ///
+  /// In es, this message translates to:
+  /// **'Todavía no hay cápsulas selladas para enviar. Sí puedes recibir una.'**
+  String get nearbyEmpty;
+
+  /// No description provided for @nearbyDiscovering.
+  ///
+  /// In es, this message translates to:
+  /// **'Buscando móviles… En el otro móvil pulsa «Recibir cápsula».'**
+  String get nearbyDiscovering;
+
+  /// No description provided for @nearbyWaiting.
+  ///
+  /// In es, this message translates to:
+  /// **'Listo para recibir. En el otro móvil elige una cápsula y pulsa «Enviar a alguien cercano».'**
+  String get nearbyWaiting;
+
+  /// No description provided for @nearbyConnecting.
+  ///
+  /// In es, this message translates to:
+  /// **'Conectando con el otro móvil…'**
+  String get nearbyConnecting;
+
+  /// No description provided for @nearbyPairing.
+  ///
+  /// In es, this message translates to:
+  /// **'Comprobad el código'**
+  String get nearbyPairing;
+
+  /// No description provided for @nearbyCodeHint.
+  ///
+  /// In es, this message translates to:
+  /// **'Confirma solo si este mismo código aparece en el otro móvil y reconoces a la persona.'**
+  String get nearbyCodeHint;
+
+  /// No description provided for @nearbyConfirm.
+  ///
+  /// In es, this message translates to:
+  /// **'El código coincide'**
+  String get nearbyConfirm;
+
+  /// No description provided for @nearbyPreparing.
+  ///
+  /// In es, this message translates to:
+  /// **'Preparando una copia cifrada…'**
+  String get nearbyPreparing;
+
+  /// No description provided for @nearbyAwaitingOffer.
+  ///
+  /// In es, this message translates to:
+  /// **'Conectados. Esperando la cápsula…'**
+  String get nearbyAwaitingOffer;
+
+  /// No description provided for @nearbyAwaitingAccept.
+  ///
+  /// In es, this message translates to:
+  /// **'Esperando que la otra persona acepte la cápsula…'**
+  String get nearbyAwaitingAccept;
+
+  /// No description provided for @nearbyAcceptTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'¿Guardar esta cápsula?'**
+  String get nearbyAcceptTitle;
+
+  /// No description provided for @nearbyAcceptHint.
+  ///
+  /// In es, this message translates to:
+  /// **'Se añadirá a tus cápsulas sin reemplazar las existentes. Acepta solo contenido de alguien de confianza.'**
+  String get nearbyAcceptHint;
+
+  /// No description provided for @nearbySending.
+  ///
+  /// In es, this message translates to:
+  /// **'Enviando cápsula…'**
+  String get nearbySending;
+
+  /// No description provided for @nearbyReceiving.
+  ///
+  /// In es, this message translates to:
+  /// **'Recibiendo cápsula…'**
+  String get nearbyReceiving;
+
+  /// No description provided for @nearbyImporting.
+  ///
+  /// In es, this message translates to:
+  /// **'Comprobando y guardando la cápsula…'**
+  String get nearbyImporting;
+
+  /// No description provided for @nearbyAwaitingSave.
+  ///
+  /// In es, this message translates to:
+  /// **'Envío completado. Esperando confirmación de guardado…'**
+  String get nearbyAwaitingSave;
+
+  /// No description provided for @nearbySent.
+  ///
+  /// In es, this message translates to:
+  /// **'La otra persona ha guardado la cápsula.'**
+  String get nearbySent;
+
+  /// No description provided for @nearbySaved.
+  ///
+  /// In es, this message translates to:
+  /// **'Cápsula recibida y añadida a «Mis cápsulas».'**
+  String get nearbySaved;
+
+  /// No description provided for @nearbyNotificationWarning.
+  ///
+  /// In es, this message translates to:
+  /// **'Se ha guardado la cápsula, pero no se ha podido programar su aviso. Revisa los permisos de notificaciones.'**
+  String get nearbyNotificationWarning;
+
+  /// No description provided for @nearbyKeepOpen.
+  ///
+  /// In es, this message translates to:
+  /// **'Mantened ambos móviles cerca y esta pantalla abierta hasta terminar. Máximo: 1 GB por cápsula.'**
+  String get nearbyKeepOpen;
+
+  /// No description provided for @nearbyError.
+  ///
+  /// In es, this message translates to:
+  /// **'No se ha completado la transferencia. Comprueba permisos, Wi-Fi, Bluetooth y espacio libre en ambos móviles. Vuelve a abrir esta pantalla para intentarlo de nuevo.'**
+  String get nearbyError;
+
+  /// No description provided for @nearbyPermission.
+  ///
+  /// In es, this message translates to:
+  /// **'Se necesitan los permisos de dispositivos cercanos (y ubicación en Android antiguos). Puedes concederlos en los ajustes del móvil.'**
+  String get nearbyPermission;
+
+  /// No description provided for @nearbyPlayServices.
+  ///
+  /// In es, this message translates to:
+  /// **'Este móvil necesita servicios de Google Play disponibles y actualizados para transferir cerca.'**
+  String get nearbyPlayServices;
+
+  /// No description provided for @nearbySpace.
+  ///
+  /// In es, this message translates to:
+  /// **'No hay espacio libre suficiente. La recepción necesita espacio temporal adicional para comprobar y cifrar los archivos.'**
+  String get nearbySpace;
+
+  /// No description provided for @nearbyTooLarge.
+  ///
+  /// In es, this message translates to:
+  /// **'La cápsula supera el límite de 1 GB para transferencias cercanas.'**
+  String get nearbyTooLarge;
+
+  /// No description provided for @nearbyDuplicate.
+  ///
+  /// In es, this message translates to:
+  /// **'Este móvil ya tiene esta cápsula. No se ha sobrescrito ni duplicado.'**
+  String get nearbyDuplicate;
+
+  /// No description provided for @nearbyDeclined.
+  ///
+  /// In es, this message translates to:
+  /// **'La conexión o la cápsula se ha rechazado. No se ha enviado la cápsula.'**
+  String get nearbyDeclined;
+
+  /// No description provided for @nearbyDisconnected.
+  ///
+  /// In es, this message translates to:
+  /// **'La conexión se ha interrumpido. Si el envío ya había terminado, comprueba «Mis cápsulas» en el móvil receptor antes de repetirlo.'**
+  String get nearbyDisconnected;
+
+  /// No description provided for @nearbyTimeout.
+  ///
+  /// In es, this message translates to:
+  /// **'Se ha agotado el tiempo de espera. Comprueba los dos móviles e inténtalo de nuevo.'**
+  String get nearbyTimeout;
+
+  /// No description provided for @nearbyBack.
+  ///
+  /// In es, this message translates to:
+  /// **'Volver a mis cápsulas'**
+  String get nearbyBack;
+
+  /// No description provided for @chooseCapsuleKind.
+  ///
+  /// In es, this message translates to:
+  /// **'¿Qué cápsula quieres crear?'**
+  String get chooseCapsuleKind;
+
+  /// No description provided for @standardCapsule.
+  ///
+  /// In es, this message translates to:
+  /// **'Cápsula del tiempo'**
+  String get standardCapsule;
+
+  /// No description provided for @standardCapsuleHint.
+  ///
+  /// In es, this message translates to:
+  /// **'La cápsula de siempre: guarda tus recuerdos y descubre todo su contenido al abrirla.'**
+  String get standardCapsuleHint;
+
+  /// No description provided for @personalizedCapsule.
+  ///
+  /// In es, this message translates to:
+  /// **'Cápsula del tiempo personalizada'**
+  String get personalizedCapsule;
+
+  /// No description provided for @personalizedCapsuleHint.
+  ///
+  /// In es, this message translates to:
+  /// **'Crea una historia con fotos, audios, textos y vídeos. Se descubrirá recuerdo a recuerdo, en el orden que elijas.'**
+  String get personalizedCapsuleHint;
+
+  /// No description provided for @sequenceHeading.
+  ///
+  /// In es, this message translates to:
+  /// **'Construye tu historia'**
+  String get sequenceHeading;
+
+  /// No description provided for @sequenceHint.
+  ///
+  /// In es, this message translates to:
+  /// **'Pulsa + para añadir el primer recuerdo. Después podrás seguir añadiendo debajo. Al abrirla, se mostrarán en este mismo orden.'**
+  String get sequenceHint;
+
+  /// No description provided for @sequenceAdd.
+  ///
+  /// In es, this message translates to:
+  /// **'Añadir recuerdo'**
+  String get sequenceAdd;
+
+  /// No description provided for @sequenceDetails.
+  ///
+  /// In es, this message translates to:
+  /// **'Continuar con los detalles'**
+  String get sequenceDetails;
+
+  /// No description provided for @sequencePrevious.
+  ///
+  /// In es, this message translates to:
+  /// **'Anterior'**
+  String get sequencePrevious;
+
+  /// No description provided for @sequenceFinish.
+  ///
+  /// In es, this message translates to:
+  /// **'Finalizar'**
+  String get sequenceFinish;
+
+  /// No description provided for @sequenceEmpty.
+  ///
+  /// In es, this message translates to:
+  /// **'Esta cápsula no tiene recuerdos.'**
+  String get sequenceEmpty;
+
+  /// No description provided for @sequencePosition.
+  ///
+  /// In es, this message translates to:
+  /// **'{current} de {total}'**
+  String sequencePosition(int current, int total);
+
+  /// No description provided for @memoryLoadError.
+  ///
+  /// In es, this message translates to:
+  /// **'No se ha podido abrir este recuerdo. Puedes continuar con el siguiente.'**
+  String get memoryLoadError;
+
+  /// No description provided for @videoPlaybackError.
+  ///
+  /// In es, this message translates to:
+  /// **'No se puede reproducir este vídeo. Comprueba que el archivo está completo y que su formato es compatible con tu dispositivo (por ejemplo, MP4 con H.264).'**
+  String get videoPlaybackError;
+
+  /// No description provided for @memoryRetry.
+  ///
+  /// In es, this message translates to:
+  /// **'Reintentar'**
+  String get memoryRetry;
+
+  /// No description provided for @mediaPlay.
+  ///
+  /// In es, this message translates to:
+  /// **'Reproducir'**
+  String get mediaPlay;
+
+  /// No description provided for @mediaPause.
+  ///
+  /// In es, this message translates to:
+  /// **'Pausar'**
+  String get mediaPause;
 }
 
 class _AppLocalizationsDelegate

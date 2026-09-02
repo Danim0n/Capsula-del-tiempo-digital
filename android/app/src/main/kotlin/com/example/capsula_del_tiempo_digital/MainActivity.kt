@@ -6,8 +6,11 @@ import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
 
 class MainActivity : FlutterFragmentActivity() {
+    private var nearbyTransfer: NearbyTransferBridge? = null
+
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
+        nearbyTransfer = NearbyTransferBridge(this, flutterEngine.dartExecutor.binaryMessenger)
         MethodChannel(flutterEngine.dartExecutor.binaryMessenger, "ctd/screen_security")
             .setMethodCallHandler { call, result ->
                 when (call.method) {
@@ -22,5 +25,15 @@ class MainActivity : FlutterFragmentActivity() {
                     else -> result.notImplemented()
                 }
             }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        nearbyTransfer?.onPermissionsResult(requestCode)
+    }
+
+    override fun onDestroy() {
+        nearbyTransfer?.dispose()
+        super.onDestroy()
     }
 }

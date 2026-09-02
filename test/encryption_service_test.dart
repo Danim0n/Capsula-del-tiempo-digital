@@ -47,4 +47,31 @@ void main() {
     await encrypted.writeAsBytes(bytes);
     await expectLater(service.verifyFile(encrypted, key), throwsA(anything));
   });
+
+  test(
+    'rekey streams multiple chunks and only the new key can decrypt',
+    () async {
+      final otherKey = await AesGcm.with256bits().newSecretKey();
+      final original = File('${directory.path}/original');
+      final bytes = List.generate(
+        EncryptionService.chunkSize + 97,
+        (i) => i % 251,
+      );
+      await original.writeAsBytes(bytes);
+      final encrypted = File('${directory.path}/encrypted');
+      final rekeyed = File('${directory.path}/rekeyed');
+      final restored = File('${directory.path}/restored');
+      await service.encryptFile(original, encrypted, key);
+      await service.reencryptFile(encrypted, rekeyed, key, otherKey);
+      await service.decryptFile(rekeyed, restored, otherKey);
+      expect(await restored.readAsBytes(), bytes);
+      await expectLater(service.verifyFile(rekeyed, key), throwsA(anything));
+      final failed = File('${directory.path}/failed');
+      await expectLater(
+        service.reencryptFile(encrypted, failed, otherKey, key),
+        throwsA(anything),
+      );
+      expect(await failed.exists(), isFalse);
+    },
+  );
 }

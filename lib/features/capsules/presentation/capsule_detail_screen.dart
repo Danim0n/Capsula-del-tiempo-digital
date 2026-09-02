@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import '../../../app/providers.dart';
 import '../../../app/theme/app_theme.dart';
 import '../../../core/navigation/app_navigation.dart';
+import '../../../core/transfer/nearby_transport.dart';
 import '../../../core/widgets/capsule_cover.dart';
 import '../../../l10n/l10n.dart';
 import '../domain/capsule_models.dart';
@@ -68,6 +69,18 @@ class CapsuleDetailScreen extends ConsumerWidget {
                 icon: Icons.collections_bookmark_outlined,
                 label: context.l10n.itemsCount(capsule.itemCount),
               ),
+              if (NearbyTransport.supported &&
+                  capsule.persistedStatus != CapsuleStatus.draft &&
+                  capsule.persistedStatus != CapsuleStatus.trashed) ...[
+                const SizedBox(height: 16),
+                OutlinedButton.icon(
+                  onPressed: () => context.push(
+                    '/nearby?capsule=${Uri.encodeComponent(capsule.id)}',
+                  ),
+                  icon: const Icon(Icons.near_me_outlined),
+                  label: Text(context.l10n.nearbySend),
+                ),
+              ],
               const SizedBox(height: 24),
               if (status == CapsuleStatus.sealed ||
                   status == CapsuleStatus.emergencyAccessed)

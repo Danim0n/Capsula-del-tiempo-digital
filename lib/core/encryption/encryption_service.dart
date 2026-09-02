@@ -99,6 +99,42 @@ class EncryptionService {
   Future<void> verifyFile(File input, SecretKey key) =>
       _decryptChunks(input, key, (_) async {});
 
+  /// Changes keys one authenticated chunk at a time, without plaintext files.
+  Future<void> reencryptFile(
+    File input,
+    File output,
+    SecretKey sourceKey,
+    SecretKey destinationKey, {
+    void Function()? checkCancelled,
+  }) async {
+    await output.parent.create(recursive: true);
+    final sink = await output.open(mode: FileMode.write);
+    final prefix = _randomBytes(8);
+    var index = 0;
+    var complete = false;
+    try {
+      await sink.writeFrom(_magic);
+      await sink.writeFrom(prefix);
+      await _decryptChunks(input, sourceKey, (clear) async {
+        checkCancelled?.call();
+        final box = await _algorithm.encrypt(
+          clear,
+          secretKey: destinationKey,
+          nonce: [...prefix, ..._uint32(index++)],
+        );
+        await sink.writeFrom(_uint32(box.cipherText.length));
+        await sink.writeFrom(box.cipherText);
+        await sink.writeFrom(box.mac.bytes);
+      });
+      checkCancelled?.call();
+      await sink.flush();
+      complete = true;
+    } finally {
+      await sink.close();
+      if (!complete && await output.exists()) await output.delete();
+    }
+  }
+
   Future<void> _decryptChunks(
     File input,
     SecretKey key,

@@ -199,6 +199,26 @@ class AppLocalizationsEn extends AppLocalizations {
   String get reviewStep => 'Review your capsule';
 
   @override
+  String get previewMemory => 'Preview';
+
+  @override
+  String get previewContent => 'Check your memories';
+
+  @override
+  String get previewMemoryHint => 'Tap a memory to view or play it.';
+
+  @override
+  String get previewDraftHint =>
+      'You are previewing a draft. Go back to continue preparing your capsule without changing its contents.';
+
+  @override
+  String get previewDraftOnly =>
+      'Preview is only available before the capsule is sealed.';
+
+  @override
+  String get previewImageHint => 'Spread two fingers on the photo to zoom in.';
+
+  @override
   String get title => 'Title';
 
   @override
@@ -242,6 +262,56 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get record => 'Record';
+
+  @override
+  String get recordingTitle => 'Record audio';
+
+  @override
+  String get recordingReady => 'Ready to start';
+
+  @override
+  String get recordingActive => 'Recording…';
+
+  @override
+  String get recordingPaused => 'Recording paused';
+
+  @override
+  String get recordingInterrupted => 'Recording interrupted';
+
+  @override
+  String get recordingStart => 'Start recording';
+
+  @override
+  String get recordingPause => 'Pause recording';
+
+  @override
+  String get recordingResume => 'Resume recording';
+
+  @override
+  String get recordingStop => 'Stop and save';
+
+  @override
+  String get recordingHint =>
+      'Tap the microphone to start. You can pause and resume; stopping adds the audio to your capsule.';
+
+  @override
+  String get recordingPermission =>
+      'Allow microphone access to record. If you blocked it, enable it in your device settings.';
+
+  @override
+  String get recordingError =>
+      'The recording could not be completed. Check the microphone and available storage. You can try again or cancel.';
+
+  @override
+  String get recordingMeterError =>
+      'The sound level cannot be displayed. Recording can continue.';
+
+  @override
+  String get recordingDiscardQuestion => 'Discard this recording?';
+
+  @override
+  String get recordingDiscardHint =>
+      'The audio will not be added to the capsule. To keep it, go back and tap stop.';
 
   @override
   String get write => 'Write';
@@ -520,4 +590,204 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get tutorialComplete =>
       'Tutorial complete. You can repeat it at any time from Settings.';
+
+  @override
+  String get nearbyTitle => 'Nearby transfer';
+
+  @override
+  String get nearbySend => 'Send to someone nearby';
+
+  @override
+  String get nearbyReceive => 'Receive capsule';
+
+  @override
+  String get nearbyIntro =>
+      'Share a capsule with a nearby Android, without Internet or cloud storage. Both phones need this version of the app open, with Wi-Fi and Bluetooth enabled. Older Android versions may also need location enabled.';
+
+  @override
+  String get nearbyPrivacy =>
+      'Only the selected capsule, its contents and cover are sent. The copy keeps the opening date and takes up space on both phones. Later changes are not synced.';
+
+  @override
+  String get nearbyUnsupported =>
+      'Nearby transfer is available between Android phones with Google Play services. You can still use the existing export on supported platforms.';
+
+  @override
+  String get nearbyExport => 'Existing export and backups';
+
+  @override
+  String get nearbyName => 'Your name for this connection';
+
+  @override
+  String get nearbyChoose => 'Choose a sealed capsule';
+
+  @override
+  String get nearbyEmpty =>
+      'There are no sealed capsules to send yet. You can still receive one.';
+
+  @override
+  String get nearbyDiscovering =>
+      'Looking for phones… Tap “Receive capsule” on the other phone.';
+
+  @override
+  String get nearbyWaiting =>
+      'Ready to receive. On the other phone choose a capsule and tap “Send to someone nearby”.';
+
+  @override
+  String get nearbyConnecting => 'Connecting to the other phone…';
+
+  @override
+  String get nearbyPairing => 'Compare the code';
+
+  @override
+  String get nearbyCodeHint =>
+      'Confirm only if the same code appears on the other phone and you recognize the person.';
+
+  @override
+  String get nearbyConfirm => 'The code matches';
+
+  @override
+  String get nearbyPreparing => 'Preparing an encrypted copy…';
+
+  @override
+  String get nearbyAwaitingOffer => 'Connected. Waiting for the capsule…';
+
+  @override
+  String get nearbyAwaitingAccept =>
+      'Waiting for the other person to accept the capsule…';
+
+  @override
+  String get nearbyAcceptTitle => 'Save this capsule?';
+
+  @override
+  String get nearbyAcceptHint =>
+      'It will be added to your capsules without replacing existing ones. Only accept content from someone you trust.';
+
+  @override
+  String get nearbySending => 'Sending capsule…';
+
+  @override
+  String get nearbyReceiving => 'Receiving capsule…';
+
+  @override
+  String get nearbyImporting => 'Verifying and saving the capsule…';
+
+  @override
+  String get nearbyAwaitingSave =>
+      'Transfer complete. Waiting for save confirmation…';
+
+  @override
+  String get nearbySent => 'The other person has saved the capsule.';
+
+  @override
+  String get nearbySaved => 'Capsule received and added to “My capsules”.';
+
+  @override
+  String get nearbyNotificationWarning =>
+      'The capsule was saved, but its reminder could not be scheduled. Check notification permissions.';
+
+  @override
+  String get nearbyKeepOpen =>
+      'Keep both phones nearby and this screen open until finished. Maximum: 1 GB per capsule.';
+
+  @override
+  String get nearbyError =>
+      'The transfer did not complete. Check permissions, Wi-Fi, Bluetooth and free space on both phones. Reopen this screen to try again.';
+
+  @override
+  String get nearbyPermission =>
+      'Nearby devices permissions are required (and location on older Android). You can grant them in your phone settings.';
+
+  @override
+  String get nearbyPlayServices =>
+      'This phone needs available, up-to-date Google Play services for nearby transfer.';
+
+  @override
+  String get nearbySpace =>
+      'There is not enough free storage. Receiving needs extra temporary space to verify and encrypt the files.';
+
+  @override
+  String get nearbyTooLarge =>
+      'The capsule exceeds the 1 GB limit for nearby transfers.';
+
+  @override
+  String get nearbyDuplicate =>
+      'This phone already has this capsule. It was not overwritten or duplicated.';
+
+  @override
+  String get nearbyDeclined =>
+      'The connection or capsule was declined. The capsule was not sent.';
+
+  @override
+  String get nearbyDisconnected =>
+      'The connection was interrupted. If the transfer had finished, check “My capsules” on the receiving phone before retrying.';
+
+  @override
+  String get nearbyTimeout =>
+      'The session timed out. Check both phones and try again.';
+
+  @override
+  String get nearbyBack => 'Back to my capsules';
+
+  @override
+  String get chooseCapsuleKind =>
+      'What kind of capsule would you like to create?';
+
+  @override
+  String get standardCapsule => 'Time capsule';
+
+  @override
+  String get standardCapsuleHint =>
+      'The original capsule: save your memories and browse all its contents when it opens.';
+
+  @override
+  String get personalizedCapsule => 'Personalized time capsule';
+
+  @override
+  String get personalizedCapsuleHint =>
+      'Build a story with photos, audio, text and videos. Discover it one memory at a time, in the order you choose.';
+
+  @override
+  String get sequenceHeading => 'Build your story';
+
+  @override
+  String get sequenceHint =>
+      'Tap + to add the first memory. Then keep adding below it. They will appear in this same order when the capsule opens.';
+
+  @override
+  String get sequenceAdd => 'Add a memory';
+
+  @override
+  String get sequenceDetails => 'Continue to details';
+
+  @override
+  String get sequencePrevious => 'Previous';
+
+  @override
+  String get sequenceFinish => 'Finish';
+
+  @override
+  String get sequenceEmpty => 'This capsule has no memories.';
+
+  @override
+  String sequencePosition(int current, int total) {
+    return '$current of $total';
+  }
+
+  @override
+  String get memoryLoadError =>
+      'This memory could not be opened. You can continue to the next one.';
+
+  @override
+  String get videoPlaybackError =>
+      'This video cannot be played. Check that the file is complete and its format is supported on your device (for example, MP4 with H.264).';
+
+  @override
+  String get memoryRetry => 'Retry';
+
+  @override
+  String get mediaPlay => 'Play';
+
+  @override
+  String get mediaPause => 'Pause';
 }

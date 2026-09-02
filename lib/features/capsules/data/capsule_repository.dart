@@ -39,10 +39,53 @@ class CapsuleRepository {
     final rows =
         await (db.select(db.capsuleItemRows)
               ..where((r) => r.capsuleId.equals(capsuleId))
-              ..orderBy([(r) => OrderingTerm.asc(r.orderIndex)]))
+              ..orderBy([(r) => OrderingTerm.asc(r.orderIndex), (r) => OrderingTerm.asc(r.createdAt), (r) => OrderingTerm.asc(r.id)]))
             .get();
     return rows.map(_mapItem).toList(growable: false);
   }
+
+  Future<bool> containsCapsule(String id) async =>
+      await (db.select(
+        db.capsuleRows,
+      )..where((r) => r.id.equals(id))).getSingleOrNull() !=
+      null;
+
+  /// Adds an immutable received copy. Never replaces a library or local keys.
+  Future<void> importSharedCapsule(
+    Capsule capsule,
+    String categoryName,
+    List<CapsuleItem> items, {
+    void Function()? checkCancelled,
+  }) => db.transaction(() async {
+    checkCancelled?.call();
+    if (await containsCapsule(capsule.id)) {
+      throw StateError('CAPSULE_ALREADY_EXISTS');
+    }
+    final category = await findOrCreateCategory(categoryName);
+    await db
+        .into(db.capsuleRows)
+        .insert(_capsuleCompanion(capsule.copyWith(categoryId: category.id)));
+    for (final item in items) {
+      checkCancelled?.call();
+      await db
+          .into(db.capsuleItemRows)
+          .insert(
+            CapsuleItemRowsCompanion.insert(
+              id: item.id,
+              capsuleId: capsule.id,
+              type: item.type.name,
+              encryptedPath: Value(item.encryptedPath),
+              encryptedText: Value(item.encryptedText),
+              textTitle: Value(item.textTitle),
+              mimeType: Value(item.mimeType),
+              byteSize: Value(item.byteSize),
+              createdAt: item.createdAt,
+              orderIndex: item.orderIndex,
+            ),
+          );
+    }
+    checkCancelled?.call();
+  });
 
   Future<List<CapsuleCategory>> getCategories() async {
     final rows =
@@ -135,6 +178,7 @@ class CapsuleRepository {
   }
 
   Future<Capsule> createDraft({
+    CapsuleKind kind = CapsuleKind.standard,
     String title = '',
     String categoryId = 'personal',
     String coverId = 'cover_01',
@@ -143,6 +187,7 @@ class CapsuleRepository {
     final now = DateTime.now();
     final capsule = Capsule(
       id: _uuid.v4(),
+      kind: kind,
       title: title,
       categoryId: categoryId,
       coverId: coverId,
@@ -303,6 +348,7 @@ class CapsuleRepository {
 
   Capsule _mapCapsule(CapsuleRow r, int count) => Capsule(
     id: r.id,
+    kind: CapsuleKind.values.byName(r.kind),
     title: r.title,
     description: r.description,
     categoryId: r.categoryId,
@@ -334,6 +380,7 @@ class CapsuleRepository {
   CapsuleRowsCompanion _capsuleCompanion(Capsule c) =>
       CapsuleRowsCompanion.insert(
         id: c.id,
+        kind: Value(c.kind.name),
         title: c.title,
         description: Value(c.description),
         categoryId: c.categoryId,
@@ -394,6 +441,7 @@ class CapsuleRepository {
             .insert(
               CapsuleRowsCompanion.insert(
                 id: m['id'] as String,
+                kind: Value(CapsuleKind.values.byName(m['kind'] as String? ?? 'standard').name),
                 title: m['title'] as String,
                 description: Value(m['description'] as String?),
                 categoryId: m['categoryId'] as String,
@@ -457,6 +505,7 @@ Map<String, dynamic> _categoryJson(CategoryRow r) => {
 
 Map<String, dynamic> _capsuleJson(CapsuleRow r) => {
   'id': r.id,
+  'kind': r.kind,
   'title': r.title,
   'description': r.description,
   'categoryId': r.categoryId,

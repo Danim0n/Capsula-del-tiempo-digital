@@ -9,6 +9,8 @@ enum CapsuleStatus {
 
 enum CapsuleItemType { image, video, audio, text }
 
+enum CapsuleKind { standard, personalized }
+
 class Capsule {
   const Capsule({
     required this.id,
@@ -19,6 +21,7 @@ class Capsule {
     required this.unlockAt,
     required this.unlockIncludesTime,
     required this.persistedStatus,
+    this.kind = CapsuleKind.standard,
     this.description,
     this.sealedAt,
     this.openedAt,
@@ -28,6 +31,7 @@ class Capsule {
   });
 
   final String id;
+  final CapsuleKind kind;
   final String title;
   final String? description;
   final String categoryId;
@@ -70,6 +74,7 @@ class Capsule {
     int? itemCount,
   }) => Capsule(
     id: id,
+    kind: kind,
     title: title ?? this.title,
     description: description ?? this.description,
     categoryId: categoryId ?? this.categoryId,

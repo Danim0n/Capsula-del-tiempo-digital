@@ -7,8 +7,10 @@ import '../features/capsules/presentation/capsule_detail_screen.dart';
 import '../features/capsules/presentation/capsules_screen.dart';
 import '../features/capsules/presentation/opening_screen.dart';
 import '../features/creation/creation_screen.dart';
+import '../features/creation/creation_mode_screen.dart';
 import '../features/home/home_screen.dart';
 import '../features/settings/settings_screens.dart';
+import '../features/transfer/nearby_transfer_screen.dart';
 import '../core/navigation/app_navigation.dart';
 import 'app_shell.dart';
 
@@ -53,6 +55,15 @@ GoRouter buildRouter(WidgetRef ref) => GoRouter(
       ],
     ),
     GoRoute(
+      path: '/nearby',
+      builder: (_, state) => BackFallbackScope(
+        fallbackLocation: '/capsules',
+        child: NearbyTransferScreen(
+          capsuleId: state.uri.queryParameters['capsule'],
+        ),
+      ),
+    ),
+    GoRoute(
       path: '/create',
       builder: (_, state) {
         final typeName = state.uri.queryParameters['type'];
@@ -60,11 +71,20 @@ GoRouter buildRouter(WidgetRef ref) => GoRouter(
         for (final candidate in CapsuleItemType.values) {
           if (candidate.name == typeName) type = candidate;
         }
+        final mode = state.uri.queryParameters['mode'];
+        final tutorial = state.uri.queryParameters['tutorial'] == 'true';
+        if (mode != 'standard' && mode != 'personalized' && type == null &&
+            !tutorial && !state.uri.queryParameters.containsKey('days') &&
+            state.uri.queryParameters['pickDate'] != 'true') {
+          return const CreationModeScreen();
+        }
         return CreationScreen(
+          key: state.pageKey,
+          kind: !tutorial && mode == 'personalized' ? CapsuleKind.personalized : CapsuleKind.standard,
           quickType: type,
           quickDays: int.tryParse(state.uri.queryParameters['days'] ?? ''),
           pickDateOnStart: state.uri.queryParameters['pickDate'] == 'true',
-          tutorial: state.uri.queryParameters['tutorial'] == 'true',
+          tutorial: tutorial,
         );
       },
     ),

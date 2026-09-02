@@ -424,15 +424,16 @@ class _CreateButton extends StatelessWidget {
                   size: 31,
                 ),
                 const SizedBox(width: 13),
-                Text(
+                Flexible(child: Text(
                   context.l10n.createCapsule,
+                  textAlign: TextAlign.center,
                   style: const TextStyle(
                     fontFamily: 'CormorantGaramond',
                     color: Colors.white,
                     fontSize: 29,
                     fontWeight: FontWeight.w600,
                   ),
-                ),
+                )),
               ],
             ),
             const SizedBox(height: 6),

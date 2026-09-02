@@ -50,6 +50,11 @@ class SettingsScreen extends ConsumerWidget {
         ),
         _section(context.l10n.data),
         _tile(
+          Icons.wifi_tethering_rounded,
+          context.l10n.nearbyTitle,
+          onTap: () => context.push('/nearby'),
+        ),
+        _tile(
           Icons.archive_outlined,
           context.l10n.backups,
           onTap: () => context.push('/settings/backups'),

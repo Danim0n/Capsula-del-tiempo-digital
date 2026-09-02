@@ -17,6 +17,7 @@ class CategoryRows extends Table {
 @DataClassName('CapsuleRow')
 class CapsuleRows extends Table {
   TextColumn get id => text()();
+  TextColumn get kind => text().withDefault(const Constant('standard'))();
   TextColumn get title => text()();
   TextColumn get description => text().nullable()();
   TextColumn get categoryId => text().references(CategoryRows, #id)();
@@ -79,7 +80,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase([QueryExecutor? executor]) : super(executor ?? openConnection());
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -97,6 +98,9 @@ class AppDatabase extends _$AppDatabase {
             ),
         ]);
       });
+    },
+    onUpgrade: (m, from, to) async {
+      if (from < 2) await m.addColumn(capsuleRows, capsuleRows.kind);
     },
     beforeOpen: (details) async {
       await customStatement('PRAGMA foreign_keys = ON');

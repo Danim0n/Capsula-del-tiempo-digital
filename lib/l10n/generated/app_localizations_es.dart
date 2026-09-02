@@ -198,6 +198,27 @@ class AppLocalizationsEs extends AppLocalizations {
   String get reviewStep => 'Revisa tu cápsula';
 
   @override
+  String get previewMemory => 'Vista previa';
+
+  @override
+  String get previewContent => 'Comprueba tus recuerdos';
+
+  @override
+  String get previewMemoryHint => 'Toca un recuerdo para verlo o reproducirlo.';
+
+  @override
+  String get previewDraftHint =>
+      'Estás viendo un borrador. Puedes volver para seguir preparando tu cápsula sin cambiar su contenido.';
+
+  @override
+  String get previewDraftOnly =>
+      'La vista previa solo está disponible antes de sellar la cápsula.';
+
+  @override
+  String get previewImageHint =>
+      'Separa dos dedos sobre la foto para ampliarla.';
+
+  @override
   String get title => 'Título';
 
   @override
@@ -241,6 +262,56 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get record => 'Grabar';
+
+  @override
+  String get recordingTitle => 'Grabar audio';
+
+  @override
+  String get recordingReady => 'Listo para empezar';
+
+  @override
+  String get recordingActive => 'Grabando…';
+
+  @override
+  String get recordingPaused => 'Grabación en pausa';
+
+  @override
+  String get recordingInterrupted => 'Grabación interrumpida';
+
+  @override
+  String get recordingStart => 'Comenzar grabación';
+
+  @override
+  String get recordingPause => 'Pausar grabación';
+
+  @override
+  String get recordingResume => 'Continuar grabación';
+
+  @override
+  String get recordingStop => 'Detener y guardar';
+
+  @override
+  String get recordingHint =>
+      'Pulsa el micrófono para empezar. Puedes pausar y continuar; al detener se añade el audio a tu cápsula.';
+
+  @override
+  String get recordingPermission =>
+      'Permite el acceso al micrófono para grabar. Si lo has bloqueado, actívalo en los ajustes de tu dispositivo.';
+
+  @override
+  String get recordingError =>
+      'No se ha podido completar la grabación. Comprueba el micrófono y el espacio disponible. Puedes volver a intentarlo o cancelar.';
+
+  @override
+  String get recordingMeterError =>
+      'No se puede mostrar el nivel de sonido. La grabación puede continuar.';
+
+  @override
+  String get recordingDiscardQuestion => '¿Descartar esta grabación?';
+
+  @override
+  String get recordingDiscardHint =>
+      'El audio no se añadirá a la cápsula. Si quieres conservarlo, vuelve y pulsa detener.';
 
   @override
   String get write => 'Escribir';
@@ -521,4 +592,203 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get tutorialComplete =>
       'Tutorial completado. Puedes repetirlo cuando quieras desde Ajustes.';
+
+  @override
+  String get nearbyTitle => 'Transferir cerca';
+
+  @override
+  String get nearbySend => 'Enviar a alguien cercano';
+
+  @override
+  String get nearbyReceive => 'Recibir cápsula';
+
+  @override
+  String get nearbyIntro =>
+      'Comparte una cápsula con otro Android cercano, sin Internet ni nube. Ambos debéis tener esta versión de la app abierta, Wi-Fi y Bluetooth activados. En Android antiguos puede hacer falta activar la ubicación.';
+
+  @override
+  String get nearbyPrivacy =>
+      'Se enviará solo la cápsula elegida, con su contenido y portada. La copia conserva la fecha de apertura y ocupa espacio en ambos móviles. No se sincronizan cambios posteriores.';
+
+  @override
+  String get nearbyUnsupported =>
+      'La transferencia cercana está disponible entre móviles Android con servicios de Google Play. Puedes seguir usando la exportación habitual en las plataformas compatibles.';
+
+  @override
+  String get nearbyExport => 'Exportación y copias actuales';
+
+  @override
+  String get nearbyName => 'Tu nombre para esta conexión';
+
+  @override
+  String get nearbyChoose => 'Elige una cápsula sellada';
+
+  @override
+  String get nearbyEmpty =>
+      'Todavía no hay cápsulas selladas para enviar. Sí puedes recibir una.';
+
+  @override
+  String get nearbyDiscovering =>
+      'Buscando móviles… En el otro móvil pulsa «Recibir cápsula».';
+
+  @override
+  String get nearbyWaiting =>
+      'Listo para recibir. En el otro móvil elige una cápsula y pulsa «Enviar a alguien cercano».';
+
+  @override
+  String get nearbyConnecting => 'Conectando con el otro móvil…';
+
+  @override
+  String get nearbyPairing => 'Comprobad el código';
+
+  @override
+  String get nearbyCodeHint =>
+      'Confirma solo si este mismo código aparece en el otro móvil y reconoces a la persona.';
+
+  @override
+  String get nearbyConfirm => 'El código coincide';
+
+  @override
+  String get nearbyPreparing => 'Preparando una copia cifrada…';
+
+  @override
+  String get nearbyAwaitingOffer => 'Conectados. Esperando la cápsula…';
+
+  @override
+  String get nearbyAwaitingAccept =>
+      'Esperando que la otra persona acepte la cápsula…';
+
+  @override
+  String get nearbyAcceptTitle => '¿Guardar esta cápsula?';
+
+  @override
+  String get nearbyAcceptHint =>
+      'Se añadirá a tus cápsulas sin reemplazar las existentes. Acepta solo contenido de alguien de confianza.';
+
+  @override
+  String get nearbySending => 'Enviando cápsula…';
+
+  @override
+  String get nearbyReceiving => 'Recibiendo cápsula…';
+
+  @override
+  String get nearbyImporting => 'Comprobando y guardando la cápsula…';
+
+  @override
+  String get nearbyAwaitingSave =>
+      'Envío completado. Esperando confirmación de guardado…';
+
+  @override
+  String get nearbySent => 'La otra persona ha guardado la cápsula.';
+
+  @override
+  String get nearbySaved => 'Cápsula recibida y añadida a «Mis cápsulas».';
+
+  @override
+  String get nearbyNotificationWarning =>
+      'Se ha guardado la cápsula, pero no se ha podido programar su aviso. Revisa los permisos de notificaciones.';
+
+  @override
+  String get nearbyKeepOpen =>
+      'Mantened ambos móviles cerca y esta pantalla abierta hasta terminar. Máximo: 1 GB por cápsula.';
+
+  @override
+  String get nearbyError =>
+      'No se ha completado la transferencia. Comprueba permisos, Wi-Fi, Bluetooth y espacio libre en ambos móviles. Vuelve a abrir esta pantalla para intentarlo de nuevo.';
+
+  @override
+  String get nearbyPermission =>
+      'Se necesitan los permisos de dispositivos cercanos (y ubicación en Android antiguos). Puedes concederlos en los ajustes del móvil.';
+
+  @override
+  String get nearbyPlayServices =>
+      'Este móvil necesita servicios de Google Play disponibles y actualizados para transferir cerca.';
+
+  @override
+  String get nearbySpace =>
+      'No hay espacio libre suficiente. La recepción necesita espacio temporal adicional para comprobar y cifrar los archivos.';
+
+  @override
+  String get nearbyTooLarge =>
+      'La cápsula supera el límite de 1 GB para transferencias cercanas.';
+
+  @override
+  String get nearbyDuplicate =>
+      'Este móvil ya tiene esta cápsula. No se ha sobrescrito ni duplicado.';
+
+  @override
+  String get nearbyDeclined =>
+      'La conexión o la cápsula se ha rechazado. No se ha enviado la cápsula.';
+
+  @override
+  String get nearbyDisconnected =>
+      'La conexión se ha interrumpido. Si el envío ya había terminado, comprueba «Mis cápsulas» en el móvil receptor antes de repetirlo.';
+
+  @override
+  String get nearbyTimeout =>
+      'Se ha agotado el tiempo de espera. Comprueba los dos móviles e inténtalo de nuevo.';
+
+  @override
+  String get nearbyBack => 'Volver a mis cápsulas';
+
+  @override
+  String get chooseCapsuleKind => '¿Qué cápsula quieres crear?';
+
+  @override
+  String get standardCapsule => 'Cápsula del tiempo';
+
+  @override
+  String get standardCapsuleHint =>
+      'La cápsula de siempre: guarda tus recuerdos y descubre todo su contenido al abrirla.';
+
+  @override
+  String get personalizedCapsule => 'Cápsula del tiempo personalizada';
+
+  @override
+  String get personalizedCapsuleHint =>
+      'Crea una historia con fotos, audios, textos y vídeos. Se descubrirá recuerdo a recuerdo, en el orden que elijas.';
+
+  @override
+  String get sequenceHeading => 'Construye tu historia';
+
+  @override
+  String get sequenceHint =>
+      'Pulsa + para añadir el primer recuerdo. Después podrás seguir añadiendo debajo. Al abrirla, se mostrarán en este mismo orden.';
+
+  @override
+  String get sequenceAdd => 'Añadir recuerdo';
+
+  @override
+  String get sequenceDetails => 'Continuar con los detalles';
+
+  @override
+  String get sequencePrevious => 'Anterior';
+
+  @override
+  String get sequenceFinish => 'Finalizar';
+
+  @override
+  String get sequenceEmpty => 'Esta cápsula no tiene recuerdos.';
+
+  @override
+  String sequencePosition(int current, int total) {
+    return '$current de $total';
+  }
+
+  @override
+  String get memoryLoadError =>
+      'No se ha podido abrir este recuerdo. Puedes continuar con el siguiente.';
+
+  @override
+  String get videoPlaybackError =>
+      'No se puede reproducir este vídeo. Comprueba que el archivo está completo y que su formato es compatible con tu dispositivo (por ejemplo, MP4 con H.264).';
+
+  @override
+  String get memoryRetry => 'Reintentar';
+
+  @override
+  String get mediaPlay => 'Reproducir';
+
+  @override
+  String get mediaPause => 'Pausar';
 }

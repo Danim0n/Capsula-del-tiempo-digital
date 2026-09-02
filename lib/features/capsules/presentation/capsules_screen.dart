@@ -64,6 +64,11 @@ class _CapsulesScreenState extends ConsumerState<CapsulesScreen> {
           style: emotionalTitle(context, size: 32),
         ),
         actions: [
+          IconButton(
+            tooltip: context.l10n.nearbyReceive,
+            icon: const Icon(Icons.wifi_tethering_rounded),
+            onPressed: () => context.push('/nearby'),
+          ),
           PopupMenuButton<CapsuleSort>(
             initialValue: _sort,
             tooltip: context.l10n.sort,

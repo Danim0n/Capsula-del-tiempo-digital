@@ -42,6 +42,7 @@ android {
 }
 
 dependencies {
+    implementation("com.google.android.gms:play-services-nearby:19.4.0")
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")
 }
 

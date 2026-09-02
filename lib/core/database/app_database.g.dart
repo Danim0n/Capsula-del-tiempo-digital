@@ -103,26 +103,22 @@ class $CategoryRowsTable extends CategoryRows
   CategoryRow map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return CategoryRow(
-      id:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}id'],
-          )!,
-      name:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}name'],
-          )!,
-      isDefault:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.bool,
-            data['${effectivePrefix}is_default'],
-          )!,
-      createdAt:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.dateTime,
-            data['${effectivePrefix}created_at'],
-          )!,
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      name: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}name'],
+      )!,
+      isDefault: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}is_default'],
+      )!,
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_at'],
+      )!,
     );
   }
 
@@ -331,6 +327,16 @@ class $CapsuleRowsTable extends CapsuleRows
     type: DriftSqlType.string,
     requiredDuringInsert: true,
   );
+  static const VerificationMeta _kindMeta = const VerificationMeta('kind');
+  @override
+  late final GeneratedColumn<String> kind = GeneratedColumn<String>(
+    'kind',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('standard'),
+  );
   static const VerificationMeta _titleMeta = const VerificationMeta('title');
   @override
   late final GeneratedColumn<String> title = GeneratedColumn<String>(
@@ -467,6 +473,7 @@ class $CapsuleRowsTable extends CapsuleRows
   @override
   List<GeneratedColumn> get $columns => [
     id,
+    kind,
     title,
     description,
     categoryId,
@@ -496,6 +503,12 @@ class $CapsuleRowsTable extends CapsuleRows
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     } else if (isInserting) {
       context.missing(_idMeta);
+    }
+    if (data.containsKey('kind')) {
+      context.handle(
+        _kindMeta,
+        kind.isAcceptableOrUnknown(data['kind']!, _kindMeta),
+      );
     }
     if (data.containsKey('title')) {
       context.handle(
@@ -601,49 +614,46 @@ class $CapsuleRowsTable extends CapsuleRows
   CapsuleRow map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return CapsuleRow(
-      id:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}id'],
-          )!,
-      title:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}title'],
-          )!,
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      kind: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}kind'],
+      )!,
+      title: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}title'],
+      )!,
       description: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}description'],
       ),
-      categoryId:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}category_id'],
-          )!,
-      coverId:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}cover_id'],
-          )!,
-      createdAt:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.dateTime,
-            data['${effectivePrefix}created_at'],
-          )!,
+      categoryId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}category_id'],
+      )!,
+      coverId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}cover_id'],
+      )!,
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_at'],
+      )!,
       sealedAt: attachedDatabase.typeMapping.read(
         DriftSqlType.dateTime,
         data['${effectivePrefix}sealed_at'],
       ),
-      unlockAt:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.dateTime,
-            data['${effectivePrefix}unlock_at'],
-          )!,
-      unlockIncludesTime:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.bool,
-            data['${effectivePrefix}unlock_includes_time'],
-          )!,
+      unlockAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}unlock_at'],
+      )!,
+      unlockIncludesTime: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}unlock_includes_time'],
+      )!,
       openedAt: attachedDatabase.typeMapping.read(
         DriftSqlType.dateTime,
         data['${effectivePrefix}opened_at'],
@@ -652,11 +662,10 @@ class $CapsuleRowsTable extends CapsuleRows
         DriftSqlType.dateTime,
         data['${effectivePrefix}emergency_accessed_at'],
       ),
-      status:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}status'],
-          )!,
+      status: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}status'],
+      )!,
       deletedAt: attachedDatabase.typeMapping.read(
         DriftSqlType.dateTime,
         data['${effectivePrefix}deleted_at'],
@@ -672,6 +681,7 @@ class $CapsuleRowsTable extends CapsuleRows
 
 class CapsuleRow extends DataClass implements Insertable<CapsuleRow> {
   final String id;
+  final String kind;
   final String title;
   final String? description;
   final String categoryId;
@@ -686,6 +696,7 @@ class CapsuleRow extends DataClass implements Insertable<CapsuleRow> {
   final DateTime? deletedAt;
   const CapsuleRow({
     required this.id,
+    required this.kind,
     required this.title,
     this.description,
     required this.categoryId,
@@ -703,6 +714,7 @@ class CapsuleRow extends DataClass implements Insertable<CapsuleRow> {
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<String>(id);
+    map['kind'] = Variable<String>(kind);
     map['title'] = Variable<String>(title);
     if (!nullToAbsent || description != null) {
       map['description'] = Variable<String>(description);
@@ -731,33 +743,29 @@ class CapsuleRow extends DataClass implements Insertable<CapsuleRow> {
   CapsuleRowsCompanion toCompanion(bool nullToAbsent) {
     return CapsuleRowsCompanion(
       id: Value(id),
+      kind: Value(kind),
       title: Value(title),
-      description:
-          description == null && nullToAbsent
-              ? const Value.absent()
-              : Value(description),
+      description: description == null && nullToAbsent
+          ? const Value.absent()
+          : Value(description),
       categoryId: Value(categoryId),
       coverId: Value(coverId),
       createdAt: Value(createdAt),
-      sealedAt:
-          sealedAt == null && nullToAbsent
-              ? const Value.absent()
-              : Value(sealedAt),
+      sealedAt: sealedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(sealedAt),
       unlockAt: Value(unlockAt),
       unlockIncludesTime: Value(unlockIncludesTime),
-      openedAt:
-          openedAt == null && nullToAbsent
-              ? const Value.absent()
-              : Value(openedAt),
-      emergencyAccessedAt:
-          emergencyAccessedAt == null && nullToAbsent
-              ? const Value.absent()
-              : Value(emergencyAccessedAt),
+      openedAt: openedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(openedAt),
+      emergencyAccessedAt: emergencyAccessedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(emergencyAccessedAt),
       status: Value(status),
-      deletedAt:
-          deletedAt == null && nullToAbsent
-              ? const Value.absent()
-              : Value(deletedAt),
+      deletedAt: deletedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(deletedAt),
     );
   }
 
@@ -768,6 +776,7 @@ class CapsuleRow extends DataClass implements Insertable<CapsuleRow> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return CapsuleRow(
       id: serializer.fromJson<String>(json['id']),
+      kind: serializer.fromJson<String>(json['kind']),
       title: serializer.fromJson<String>(json['title']),
       description: serializer.fromJson<String?>(json['description']),
       categoryId: serializer.fromJson<String>(json['categoryId']),
@@ -789,6 +798,7 @@ class CapsuleRow extends DataClass implements Insertable<CapsuleRow> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<String>(id),
+      'kind': serializer.toJson<String>(kind),
       'title': serializer.toJson<String>(title),
       'description': serializer.toJson<String?>(description),
       'categoryId': serializer.toJson<String>(categoryId),
@@ -806,6 +816,7 @@ class CapsuleRow extends DataClass implements Insertable<CapsuleRow> {
 
   CapsuleRow copyWith({
     String? id,
+    String? kind,
     String? title,
     Value<String?> description = const Value.absent(),
     String? categoryId,
@@ -820,6 +831,7 @@ class CapsuleRow extends DataClass implements Insertable<CapsuleRow> {
     Value<DateTime?> deletedAt = const Value.absent(),
   }) => CapsuleRow(
     id: id ?? this.id,
+    kind: kind ?? this.kind,
     title: title ?? this.title,
     description: description.present ? description.value : this.description,
     categoryId: categoryId ?? this.categoryId,
@@ -829,34 +841,34 @@ class CapsuleRow extends DataClass implements Insertable<CapsuleRow> {
     unlockAt: unlockAt ?? this.unlockAt,
     unlockIncludesTime: unlockIncludesTime ?? this.unlockIncludesTime,
     openedAt: openedAt.present ? openedAt.value : this.openedAt,
-    emergencyAccessedAt:
-        emergencyAccessedAt.present
-            ? emergencyAccessedAt.value
-            : this.emergencyAccessedAt,
+    emergencyAccessedAt: emergencyAccessedAt.present
+        ? emergencyAccessedAt.value
+        : this.emergencyAccessedAt,
     status: status ?? this.status,
     deletedAt: deletedAt.present ? deletedAt.value : this.deletedAt,
   );
   CapsuleRow copyWithCompanion(CapsuleRowsCompanion data) {
     return CapsuleRow(
       id: data.id.present ? data.id.value : this.id,
+      kind: data.kind.present ? data.kind.value : this.kind,
       title: data.title.present ? data.title.value : this.title,
-      description:
-          data.description.present ? data.description.value : this.description,
-      categoryId:
-          data.categoryId.present ? data.categoryId.value : this.categoryId,
+      description: data.description.present
+          ? data.description.value
+          : this.description,
+      categoryId: data.categoryId.present
+          ? data.categoryId.value
+          : this.categoryId,
       coverId: data.coverId.present ? data.coverId.value : this.coverId,
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
       sealedAt: data.sealedAt.present ? data.sealedAt.value : this.sealedAt,
       unlockAt: data.unlockAt.present ? data.unlockAt.value : this.unlockAt,
-      unlockIncludesTime:
-          data.unlockIncludesTime.present
-              ? data.unlockIncludesTime.value
-              : this.unlockIncludesTime,
+      unlockIncludesTime: data.unlockIncludesTime.present
+          ? data.unlockIncludesTime.value
+          : this.unlockIncludesTime,
       openedAt: data.openedAt.present ? data.openedAt.value : this.openedAt,
-      emergencyAccessedAt:
-          data.emergencyAccessedAt.present
-              ? data.emergencyAccessedAt.value
-              : this.emergencyAccessedAt,
+      emergencyAccessedAt: data.emergencyAccessedAt.present
+          ? data.emergencyAccessedAt.value
+          : this.emergencyAccessedAt,
       status: data.status.present ? data.status.value : this.status,
       deletedAt: data.deletedAt.present ? data.deletedAt.value : this.deletedAt,
     );
@@ -866,6 +878,7 @@ class CapsuleRow extends DataClass implements Insertable<CapsuleRow> {
   String toString() {
     return (StringBuffer('CapsuleRow(')
           ..write('id: $id, ')
+          ..write('kind: $kind, ')
           ..write('title: $title, ')
           ..write('description: $description, ')
           ..write('categoryId: $categoryId, ')
@@ -885,6 +898,7 @@ class CapsuleRow extends DataClass implements Insertable<CapsuleRow> {
   @override
   int get hashCode => Object.hash(
     id,
+    kind,
     title,
     description,
     categoryId,
@@ -903,6 +917,7 @@ class CapsuleRow extends DataClass implements Insertable<CapsuleRow> {
       identical(this, other) ||
       (other is CapsuleRow &&
           other.id == this.id &&
+          other.kind == this.kind &&
           other.title == this.title &&
           other.description == this.description &&
           other.categoryId == this.categoryId &&
@@ -919,6 +934,7 @@ class CapsuleRow extends DataClass implements Insertable<CapsuleRow> {
 
 class CapsuleRowsCompanion extends UpdateCompanion<CapsuleRow> {
   final Value<String> id;
+  final Value<String> kind;
   final Value<String> title;
   final Value<String?> description;
   final Value<String> categoryId;
@@ -934,6 +950,7 @@ class CapsuleRowsCompanion extends UpdateCompanion<CapsuleRow> {
   final Value<int> rowid;
   const CapsuleRowsCompanion({
     this.id = const Value.absent(),
+    this.kind = const Value.absent(),
     this.title = const Value.absent(),
     this.description = const Value.absent(),
     this.categoryId = const Value.absent(),
@@ -950,6 +967,7 @@ class CapsuleRowsCompanion extends UpdateCompanion<CapsuleRow> {
   });
   CapsuleRowsCompanion.insert({
     required String id,
+    this.kind = const Value.absent(),
     required String title,
     this.description = const Value.absent(),
     required String categoryId,
@@ -973,6 +991,7 @@ class CapsuleRowsCompanion extends UpdateCompanion<CapsuleRow> {
        status = Value(status);
   static Insertable<CapsuleRow> custom({
     Expression<String>? id,
+    Expression<String>? kind,
     Expression<String>? title,
     Expression<String>? description,
     Expression<String>? categoryId,
@@ -989,6 +1008,7 @@ class CapsuleRowsCompanion extends UpdateCompanion<CapsuleRow> {
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
+      if (kind != null) 'kind': kind,
       if (title != null) 'title': title,
       if (description != null) 'description': description,
       if (categoryId != null) 'category_id': categoryId,
@@ -1009,6 +1029,7 @@ class CapsuleRowsCompanion extends UpdateCompanion<CapsuleRow> {
 
   CapsuleRowsCompanion copyWith({
     Value<String>? id,
+    Value<String>? kind,
     Value<String>? title,
     Value<String?>? description,
     Value<String>? categoryId,
@@ -1025,6 +1046,7 @@ class CapsuleRowsCompanion extends UpdateCompanion<CapsuleRow> {
   }) {
     return CapsuleRowsCompanion(
       id: id ?? this.id,
+      kind: kind ?? this.kind,
       title: title ?? this.title,
       description: description ?? this.description,
       categoryId: categoryId ?? this.categoryId,
@@ -1046,6 +1068,9 @@ class CapsuleRowsCompanion extends UpdateCompanion<CapsuleRow> {
     final map = <String, Expression>{};
     if (id.present) {
       map['id'] = Variable<String>(id.value);
+    }
+    if (kind.present) {
+      map['kind'] = Variable<String>(kind.value);
     }
     if (title.present) {
       map['title'] = Variable<String>(title.value);
@@ -1095,6 +1120,7 @@ class CapsuleRowsCompanion extends UpdateCompanion<CapsuleRow> {
   String toString() {
     return (StringBuffer('CapsuleRowsCompanion(')
           ..write('id: $id, ')
+          ..write('kind: $kind, ')
           ..write('title: $title, ')
           ..write('description: $description, ')
           ..write('categoryId: $categoryId, ')
@@ -1336,21 +1362,18 @@ class $CapsuleItemRowsTable extends CapsuleItemRows
   CapsuleItemRow map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return CapsuleItemRow(
-      id:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}id'],
-          )!,
-      capsuleId:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}capsule_id'],
-          )!,
-      type:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}type'],
-          )!,
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      capsuleId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}capsule_id'],
+      )!,
+      type: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}type'],
+      )!,
       encryptedPath: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}encrypted_path'],
@@ -1367,21 +1390,18 @@ class $CapsuleItemRowsTable extends CapsuleItemRows
         DriftSqlType.string,
         data['${effectivePrefix}mime_type'],
       ),
-      byteSize:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.int,
-            data['${effectivePrefix}byte_size'],
-          )!,
-      createdAt:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.dateTime,
-            data['${effectivePrefix}created_at'],
-          )!,
-      orderIndex:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.int,
-            data['${effectivePrefix}order_index'],
-          )!,
+      byteSize: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}byte_size'],
+      )!,
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_at'],
+      )!,
+      orderIndex: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}order_index'],
+      )!,
     );
   }
 
@@ -1443,22 +1463,18 @@ class CapsuleItemRow extends DataClass implements Insertable<CapsuleItemRow> {
       id: Value(id),
       capsuleId: Value(capsuleId),
       type: Value(type),
-      encryptedPath:
-          encryptedPath == null && nullToAbsent
-              ? const Value.absent()
-              : Value(encryptedPath),
-      encryptedText:
-          encryptedText == null && nullToAbsent
-              ? const Value.absent()
-              : Value(encryptedText),
-      textTitle:
-          textTitle == null && nullToAbsent
-              ? const Value.absent()
-              : Value(textTitle),
-      mimeType:
-          mimeType == null && nullToAbsent
-              ? const Value.absent()
-              : Value(mimeType),
+      encryptedPath: encryptedPath == null && nullToAbsent
+          ? const Value.absent()
+          : Value(encryptedPath),
+      encryptedText: encryptedText == null && nullToAbsent
+          ? const Value.absent()
+          : Value(encryptedText),
+      textTitle: textTitle == null && nullToAbsent
+          ? const Value.absent()
+          : Value(textTitle),
+      mimeType: mimeType == null && nullToAbsent
+          ? const Value.absent()
+          : Value(mimeType),
       byteSize: Value(byteSize),
       createdAt: Value(createdAt),
       orderIndex: Value(orderIndex),
@@ -1515,10 +1531,12 @@ class CapsuleItemRow extends DataClass implements Insertable<CapsuleItemRow> {
     id: id ?? this.id,
     capsuleId: capsuleId ?? this.capsuleId,
     type: type ?? this.type,
-    encryptedPath:
-        encryptedPath.present ? encryptedPath.value : this.encryptedPath,
-    encryptedText:
-        encryptedText.present ? encryptedText.value : this.encryptedText,
+    encryptedPath: encryptedPath.present
+        ? encryptedPath.value
+        : this.encryptedPath,
+    encryptedText: encryptedText.present
+        ? encryptedText.value
+        : this.encryptedText,
     textTitle: textTitle.present ? textTitle.value : this.textTitle,
     mimeType: mimeType.present ? mimeType.value : this.mimeType,
     byteSize: byteSize ?? this.byteSize,
@@ -1530,20 +1548,19 @@ class CapsuleItemRow extends DataClass implements Insertable<CapsuleItemRow> {
       id: data.id.present ? data.id.value : this.id,
       capsuleId: data.capsuleId.present ? data.capsuleId.value : this.capsuleId,
       type: data.type.present ? data.type.value : this.type,
-      encryptedPath:
-          data.encryptedPath.present
-              ? data.encryptedPath.value
-              : this.encryptedPath,
-      encryptedText:
-          data.encryptedText.present
-              ? data.encryptedText.value
-              : this.encryptedText,
+      encryptedPath: data.encryptedPath.present
+          ? data.encryptedPath.value
+          : this.encryptedPath,
+      encryptedText: data.encryptedText.present
+          ? data.encryptedText.value
+          : this.encryptedText,
       textTitle: data.textTitle.present ? data.textTitle.value : this.textTitle,
       mimeType: data.mimeType.present ? data.mimeType.value : this.mimeType,
       byteSize: data.byteSize.present ? data.byteSize.value : this.byteSize,
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
-      orderIndex:
-          data.orderIndex.present ? data.orderIndex.value : this.orderIndex,
+      orderIndex: data.orderIndex.present
+          ? data.orderIndex.value
+          : this.orderIndex,
     );
   }
 
@@ -1812,16 +1829,14 @@ class $AppSettingRowsTable extends AppSettingRows
   AppSettingRow map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return AppSettingRow(
-      key:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}key'],
-          )!,
-      value:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}value'],
-          )!,
+      key: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}key'],
+      )!,
+      value: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}value'],
+      )!,
     );
   }
 
@@ -2069,26 +2084,22 @@ class $BackupMetadataRowsTable extends BackupMetadataRows
   BackupMetadataRow map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return BackupMetadataRow(
-      id:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.int,
-            data['${effectivePrefix}id'],
-          )!,
-      createdAt:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.dateTime,
-            data['${effectivePrefix}created_at'],
-          )!,
-      destinationName:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}destination_name'],
-          )!,
-      byteSize:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.int,
-            data['${effectivePrefix}byte_size'],
-          )!,
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_at'],
+      )!,
+      destinationName: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}destination_name'],
+      )!,
+      byteSize: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}byte_size'],
+      )!,
     );
   }
 
@@ -2167,10 +2178,9 @@ class BackupMetadataRow extends DataClass
     return BackupMetadataRow(
       id: data.id.present ? data.id.value : this.id,
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
-      destinationName:
-          data.destinationName.present
-              ? data.destinationName.value
-              : this.destinationName,
+      destinationName: data.destinationName.present
+          ? data.destinationName.value
+          : this.destinationName,
       byteSize: data.byteSize.present ? data.byteSize.value : this.byteSize,
     );
   }
@@ -2504,13 +2514,12 @@ class $$CategoryRowsTableTableManager
         TableManagerState(
           db: db,
           table: table,
-          createFilteringComposer:
-              () => $$CategoryRowsTableFilterComposer($db: db, $table: table),
-          createOrderingComposer:
-              () => $$CategoryRowsTableOrderingComposer($db: db, $table: table),
-          createComputedFieldComposer:
-              () =>
-                  $$CategoryRowsTableAnnotationComposer($db: db, $table: table),
+          createFilteringComposer: () =>
+              $$CategoryRowsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$CategoryRowsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$CategoryRowsTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback:
               ({
                 Value<String> id = const Value.absent(),
@@ -2539,16 +2548,14 @@ class $$CategoryRowsTableTableManager
                 createdAt: createdAt,
                 rowid: rowid,
               ),
-          withReferenceMapper:
-              (p0) =>
-                  p0
-                      .map(
-                        (e) => (
-                          e.readTable(table),
-                          $$CategoryRowsTableReferences(db, table, e),
-                        ),
-                      )
-                      .toList(),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $$CategoryRowsTableReferences(db, table, e),
+                ),
+              )
+              .toList(),
           prefetchHooksCallback: ({capsuleRowsRefs = false}) {
             return PrefetchHooks(
               db: db,
@@ -2565,17 +2572,14 @@ class $$CategoryRowsTableTableManager
                       currentTable: table,
                       referencedTable: $$CategoryRowsTableReferences
                           ._capsuleRowsRefsTable(db),
-                      managerFromTypedResult:
-                          (p0) =>
-                              $$CategoryRowsTableReferences(
-                                db,
-                                table,
-                                p0,
-                              ).capsuleRowsRefs,
-                      referencedItemsForCurrentItem:
-                          (item, referencedItems) => referencedItems.where(
-                            (e) => e.categoryId == item.id,
-                          ),
+                      managerFromTypedResult: (p0) =>
+                          $$CategoryRowsTableReferences(
+                            db,
+                            table,
+                            p0,
+                          ).capsuleRowsRefs,
+                      referencedItemsForCurrentItem: (item, referencedItems) =>
+                          referencedItems.where((e) => e.categoryId == item.id),
                       typedResults: items,
                     ),
                 ];
@@ -2603,6 +2607,7 @@ typedef $$CategoryRowsTableProcessedTableManager =
 typedef $$CapsuleRowsTableCreateCompanionBuilder =
     CapsuleRowsCompanion Function({
       required String id,
+      Value<String> kind,
       required String title,
       Value<String?> description,
       required String categoryId,
@@ -2620,6 +2625,7 @@ typedef $$CapsuleRowsTableCreateCompanionBuilder =
 typedef $$CapsuleRowsTableUpdateCompanionBuilder =
     CapsuleRowsCompanion Function({
       Value<String> id,
+      Value<String> kind,
       Value<String> title,
       Value<String?> description,
       Value<String> categoryId,
@@ -2693,6 +2699,11 @@ class $$CapsuleRowsTableFilterComposer
   });
   ColumnFilters<String> get id => $composableBuilder(
     column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get kind => $composableBuilder(
+    column: $table.kind,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -2814,6 +2825,11 @@ class $$CapsuleRowsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<String> get kind => $composableBuilder(
+    column: $table.kind,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<String> get title => $composableBuilder(
     column: $table.title,
     builder: (column) => ColumnOrderings(column),
@@ -2904,6 +2920,9 @@ class $$CapsuleRowsTableAnnotationComposer
   });
   GeneratedColumn<String> get id =>
       $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get kind =>
+      $composableBuilder(column: $table.kind, builder: (column) => column);
 
   GeneratedColumn<String> get title =>
       $composableBuilder(column: $table.title, builder: (column) => column);
@@ -3013,16 +3032,16 @@ class $$CapsuleRowsTableTableManager
         TableManagerState(
           db: db,
           table: table,
-          createFilteringComposer:
-              () => $$CapsuleRowsTableFilterComposer($db: db, $table: table),
-          createOrderingComposer:
-              () => $$CapsuleRowsTableOrderingComposer($db: db, $table: table),
-          createComputedFieldComposer:
-              () =>
-                  $$CapsuleRowsTableAnnotationComposer($db: db, $table: table),
+          createFilteringComposer: () =>
+              $$CapsuleRowsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$CapsuleRowsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$CapsuleRowsTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback:
               ({
                 Value<String> id = const Value.absent(),
+                Value<String> kind = const Value.absent(),
                 Value<String> title = const Value.absent(),
                 Value<String?> description = const Value.absent(),
                 Value<String> categoryId = const Value.absent(),
@@ -3038,6 +3057,7 @@ class $$CapsuleRowsTableTableManager
                 Value<int> rowid = const Value.absent(),
               }) => CapsuleRowsCompanion(
                 id: id,
+                kind: kind,
                 title: title,
                 description: description,
                 categoryId: categoryId,
@@ -3055,6 +3075,7 @@ class $$CapsuleRowsTableTableManager
           createCompanionCallback:
               ({
                 required String id,
+                Value<String> kind = const Value.absent(),
                 required String title,
                 Value<String?> description = const Value.absent(),
                 required String categoryId,
@@ -3070,6 +3091,7 @@ class $$CapsuleRowsTableTableManager
                 Value<int> rowid = const Value.absent(),
               }) => CapsuleRowsCompanion.insert(
                 id: id,
+                kind: kind,
                 title: title,
                 description: description,
                 categoryId: categoryId,
@@ -3084,85 +3106,82 @@ class $$CapsuleRowsTableTableManager
                 deletedAt: deletedAt,
                 rowid: rowid,
               ),
-          withReferenceMapper:
-              (p0) =>
-                  p0
-                      .map(
-                        (e) => (
-                          e.readTable(table),
-                          $$CapsuleRowsTableReferences(db, table, e),
-                        ),
-                      )
-                      .toList(),
-          prefetchHooksCallback: ({
-            categoryId = false,
-            capsuleItemRowsRefs = false,
-          }) {
-            return PrefetchHooks(
-              db: db,
-              explicitlyWatchedTables: [
-                if (capsuleItemRowsRefs) db.capsuleItemRows,
-              ],
-              addJoins: <
-                T extends TableManagerState<
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic
-                >
-              >(state) {
-                if (categoryId) {
-                  state =
-                      state.withJoin(
-                            currentTable: table,
-                            currentColumn: table.categoryId,
-                            referencedTable: $$CapsuleRowsTableReferences
-                                ._categoryIdTable(db),
-                            referencedColumn:
-                                $$CapsuleRowsTableReferences
-                                    ._categoryIdTable(db)
-                                    .id,
-                          )
-                          as T;
-                }
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $$CapsuleRowsTableReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback:
+              ({categoryId = false, capsuleItemRowsRefs = false}) {
+                return PrefetchHooks(
+                  db: db,
+                  explicitlyWatchedTables: [
+                    if (capsuleItemRowsRefs) db.capsuleItemRows,
+                  ],
+                  addJoins:
+                      <
+                        T extends TableManagerState<
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic
+                        >
+                      >(state) {
+                        if (categoryId) {
+                          state =
+                              state.withJoin(
+                                    currentTable: table,
+                                    currentColumn: table.categoryId,
+                                    referencedTable:
+                                        $$CapsuleRowsTableReferences
+                                            ._categoryIdTable(db),
+                                    referencedColumn:
+                                        $$CapsuleRowsTableReferences
+                                            ._categoryIdTable(db)
+                                            .id,
+                                  )
+                                  as T;
+                        }
 
-                return state;
-              },
-              getPrefetchedDataCallback: (items) async {
-                return [
-                  if (capsuleItemRowsRefs)
-                    await $_getPrefetchedData<
-                      CapsuleRow,
-                      $CapsuleRowsTable,
-                      CapsuleItemRow
-                    >(
-                      currentTable: table,
-                      referencedTable: $$CapsuleRowsTableReferences
-                          ._capsuleItemRowsRefsTable(db),
-                      managerFromTypedResult:
-                          (p0) =>
+                        return state;
+                      },
+                  getPrefetchedDataCallback: (items) async {
+                    return [
+                      if (capsuleItemRowsRefs)
+                        await $_getPrefetchedData<
+                          CapsuleRow,
+                          $CapsuleRowsTable,
+                          CapsuleItemRow
+                        >(
+                          currentTable: table,
+                          referencedTable: $$CapsuleRowsTableReferences
+                              ._capsuleItemRowsRefsTable(db),
+                          managerFromTypedResult: (p0) =>
                               $$CapsuleRowsTableReferences(
                                 db,
                                 table,
                                 p0,
                               ).capsuleItemRowsRefs,
-                      referencedItemsForCurrentItem:
-                          (item, referencedItems) => referencedItems.where(
-                            (e) => e.capsuleId == item.id,
-                          ),
-                      typedResults: items,
-                    ),
-                ];
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.capsuleId == item.id,
+                              ),
+                          typedResults: items,
+                        ),
+                    ];
+                  },
+                );
               },
-            );
-          },
         ),
       );
 }
@@ -3483,19 +3502,12 @@ class $$CapsuleItemRowsTableTableManager
         TableManagerState(
           db: db,
           table: table,
-          createFilteringComposer:
-              () =>
-                  $$CapsuleItemRowsTableFilterComposer($db: db, $table: table),
-          createOrderingComposer:
-              () => $$CapsuleItemRowsTableOrderingComposer(
-                $db: db,
-                $table: table,
-              ),
-          createComputedFieldComposer:
-              () => $$CapsuleItemRowsTableAnnotationComposer(
-                $db: db,
-                $table: table,
-              ),
+          createFilteringComposer: () =>
+              $$CapsuleItemRowsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$CapsuleItemRowsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$CapsuleItemRowsTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback:
               ({
                 Value<String> id = const Value.absent(),
@@ -3548,52 +3560,52 @@ class $$CapsuleItemRowsTableTableManager
                 orderIndex: orderIndex,
                 rowid: rowid,
               ),
-          withReferenceMapper:
-              (p0) =>
-                  p0
-                      .map(
-                        (e) => (
-                          e.readTable(table),
-                          $$CapsuleItemRowsTableReferences(db, table, e),
-                        ),
-                      )
-                      .toList(),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $$CapsuleItemRowsTableReferences(db, table, e),
+                ),
+              )
+              .toList(),
           prefetchHooksCallback: ({capsuleId = false}) {
             return PrefetchHooks(
               db: db,
               explicitlyWatchedTables: [],
-              addJoins: <
-                T extends TableManagerState<
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic
-                >
-              >(state) {
-                if (capsuleId) {
-                  state =
-                      state.withJoin(
-                            currentTable: table,
-                            currentColumn: table.capsuleId,
-                            referencedTable: $$CapsuleItemRowsTableReferences
-                                ._capsuleIdTable(db),
-                            referencedColumn:
-                                $$CapsuleItemRowsTableReferences
-                                    ._capsuleIdTable(db)
-                                    .id,
-                          )
-                          as T;
-                }
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (capsuleId) {
+                      state =
+                          state.withJoin(
+                                currentTable: table,
+                                currentColumn: table.capsuleId,
+                                referencedTable:
+                                    $$CapsuleItemRowsTableReferences
+                                        ._capsuleIdTable(db),
+                                referencedColumn:
+                                    $$CapsuleItemRowsTableReferences
+                                        ._capsuleIdTable(db)
+                                        .id,
+                              )
+                              as T;
+                    }
 
-                return state;
-              },
+                    return state;
+                  },
               getPrefetchedDataCallback: (items) async {
                 return [];
               },
@@ -3711,16 +3723,12 @@ class $$AppSettingRowsTableTableManager
         TableManagerState(
           db: db,
           table: table,
-          createFilteringComposer:
-              () => $$AppSettingRowsTableFilterComposer($db: db, $table: table),
-          createOrderingComposer:
-              () =>
-                  $$AppSettingRowsTableOrderingComposer($db: db, $table: table),
-          createComputedFieldComposer:
-              () => $$AppSettingRowsTableAnnotationComposer(
-                $db: db,
-                $table: table,
-              ),
+          createFilteringComposer: () =>
+              $$AppSettingRowsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$AppSettingRowsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$AppSettingRowsTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback:
               ({
                 Value<String> key = const Value.absent(),
@@ -3738,16 +3746,9 @@ class $$AppSettingRowsTableTableManager
                 value: value,
                 rowid: rowid,
               ),
-          withReferenceMapper:
-              (p0) =>
-                  p0
-                      .map(
-                        (e) => (
-                          e.readTable(table),
-                          BaseReferences(db, table, e),
-                        ),
-                      )
-                      .toList(),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
           prefetchHooksCallback: null,
         ),
       );
@@ -3898,18 +3899,12 @@ class $$BackupMetadataRowsTableTableManager
         TableManagerState(
           db: db,
           table: table,
-          createFilteringComposer:
-              () => $$BackupMetadataRowsTableFilterComposer(
-                $db: db,
-                $table: table,
-              ),
-          createOrderingComposer:
-              () => $$BackupMetadataRowsTableOrderingComposer(
-                $db: db,
-                $table: table,
-              ),
-          createComputedFieldComposer:
-              () => $$BackupMetadataRowsTableAnnotationComposer(
+          createFilteringComposer: () =>
+              $$BackupMetadataRowsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$BackupMetadataRowsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$BackupMetadataRowsTableAnnotationComposer(
                 $db: db,
                 $table: table,
               ),
@@ -3937,16 +3932,9 @@ class $$BackupMetadataRowsTableTableManager
                 destinationName: destinationName,
                 byteSize: byteSize,
               ),
-          withReferenceMapper:
-              (p0) =>
-                  p0
-                      .map(
-                        (e) => (
-                          e.readTable(table),
-                          BaseReferences(db, table, e),
-                        ),
-                      )
-                      .toList(),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
           prefetchHooksCallback: null,
         ),
       );
